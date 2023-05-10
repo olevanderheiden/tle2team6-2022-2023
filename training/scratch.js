@@ -1,14 +1,17 @@
 // Grab all the DOM elements
-const video = document.getElementById("video");
-const videoStatus = document.getElementById("videoStatus");
-const loading = document.getElementById("loading");
+const video = document.getElementById('video');
+const videoStatus = document.getElementById('video-status');
+const loading = document.getElementById('loading');
 
-const train = document.getElementById("train");
-const saveButton = document.getElementById("saveButton");
-const loss = document.getElementById("loss");
-const result = document.getElementById("result");
-const confidence = document.getElementById("confidence");
-const predict = document.getElementById("predict");
+const addInfoButton = document.getElementById('add-info-button');
+const addImageButton = document.getElementById('add-image-button');
+
+const train = document.getElementById('train');
+const saveButton = document.getElementById('save-button');
+const loss = document.getElementById('loss');
+const result = document.getElementById('result');
+const confidence = document.getElementById('confidence');
+const predict = document.getElementById('predict');
 
 // A variable to store the total loss
 let totalLoss = 0;
@@ -25,43 +28,22 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
 // A function to be called when the model has been loaded
 function modelLoaded() {
-    loading.innerText = "Model loaded!";
-    classifier.load('./model/model.json', function() {
-        loading.innerText = "Model and custom model loaded!";
-        classifier.classify(gotResults);
-    })
+    loading.innerText = 'Model loaded!';
+    // classifier.load('./model/model.json', function() {
+    //     loading.innerText = 'Model and custom model loaded!';
+    //     classifier.classify(gotResults);
+    // })
 }
 
 // Extract the already learned features from MobileNet
-const featureExtractor = ml5.featureExtractor("MobileNet", modelLoaded);
+const featureExtractor = ml5.featureExtractor('MobileNet', modelLoaded);
 // Create a new classifier using those features
 const classifier = featureExtractor.classification(video, videoReady);
 
 // A function to be called when the video is finished loading
 function videoReady() {
-    videoStatus.innerText = "Video ready!";
+    videoStatus.innerText = 'Video ready!';
 }
-
-// When the headphone button is pressed, add the current frame
-// from the video with a label of headphone to the classifier
-headphoneButton.onclick = function() {
-    classifier.addImage("headphone");
-    amountOfHeadphoneImages.innerText = Number(amountOfHeadphoneImages.innerText) + 1;
-};
-
-// When the phone button is pressed, add the current frame
-// from the video with a label of phone to the classifier
-phoneButton.onclick = function() {
-    classifier.addImage("phone");
-    amountOfPhoneImages.innerText = Number(amountOfPhoneImages.innerText) + 1;
-};
-
-// When the bottle button is pressed, add the current frame
-// from the video with a label of bottle to the classifier
-bottleButton.onclick = function() {
-    classifier.addImage("bottle");
-    amountOfBottleImages.innerText = Number(amountOfBottleImages.innerText) + 1;
-};
 
 // When the train button is pressed, train the classifier
 // With all the given headphone, phone and bottle images
@@ -97,4 +79,26 @@ function gotResults(err, results) {
 // Start predicting when the predict button is clicked
 predict.onclick = function() {
     classifier.classify(gotResults);
+}
+
+addInfoButton.addEventListener('click', addInfo)
+addImageButton.addEventListener('click', addImage)
+
+function addInfo (e) {
+    e.preventDefault()
+}
+
+function addImage (e) {
+    e.preventDefault()
+    // classifier.addImage('phone');
+    let product = {
+        'category': document.getElementById('product-category').value,
+        'brand': document.getElementById('brand').value,
+        'name': document.getElementById('name').value,
+        'size-type': document.getElementById('size-type').value,
+        'size': document.getElementById('size').value,
+        'date-type': document.getElementById('date-type').value,
+        'best-before-time': document.getElementById('best-before-time').value,
+    }
+    classifier.addImage(product);
 }
