@@ -1,0 +1,11 @@
+{
+  "name": "tle2team6-2022-2023",
+  "version": "1.0.0",
+  "description": "Wow, dit is een project van TLE!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
