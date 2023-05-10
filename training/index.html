@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Classification using Feature Extraction with MobileNet</title>
+
+    <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+
+    <script src="./form-handler.js" defer></script>
+
+    <style></style>
+</head>
+
+<body>
+<h2>Image Classification using Feature Extraction with MobileNet</h2>
+<h3>(Train a Neural Network to distinguish between Headphone, Phone or Bottle images)</h3>
+<video id="video" width="640" height="480" autoplay></video>
+
+<h6><span id="loading">Loading base model...</span> | <span id="videoStatus">Loading video...</span></h6>
+<form>
+    <label>Welk Product?</label>
+    <select id="product">
+        <option value="new" selected>Nieuw product</option>
+        <option>Bestaand product</option>
+    </select>
+
+    <div id="hidden-if-not-new">
+        <label for="name">Naam</label><br />
+        <input id="name" type="text"/><br />
+        <label for="size-type">Type Grootte</label><br />
+        <select id="size-type">
+            <option value="ML" selected>Volume in Milliliters</option>
+            <option value="Gram">Gewicht in gram</option>
+        </select><br />
+        <label for="size">Grootte</label><br />
+        <input id="size" type="number"/> <span id="size-notation">ML</span><span id="readable-size"> (= 0L)</span><br />
+        <label for="size-type">Type Houdbaarheidsdatum</label><br />
+        <select id="date-type">
+            <option value="THT" selected>Tenminste Houdbaar tot</option>
+            <option value="TGT">Te Gebruiken Tot</option>
+        </select><br />
+        <label for="best-before-date">Aantal dagen houdbaar na aankoop</label><br />
+        <input id="best-before-date" type="number"/> <span id="date-notation">dagen tot THT</span><br />
+    </div>
+</form>
+
+<br />
+<p><button id="train">Train</button><span id="loss"></span></p>
+<br />
+<p><button id="saveButton">Save</button></p>
+<br />
+<p>
+    <button id="predict">Start guessing!</button><br />
+    My guess is: <span id="result">...</span>
+    , with a confidence of <span id="confidence">...</span>.
+</p>
+<script src="./scratch.js"></script>
+</body>
+</html>
