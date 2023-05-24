@@ -5,6 +5,7 @@ const loading = document.getElementById('loading');
 
 const addInfoButton = document.getElementById('add-info-button');
 const addImageButton = document.getElementById('add-image-button');
+const imageFilesInput = document.getElementById('training-data');
 
 const train = document.getElementById('train');
 const saveButton = document.getElementById('save-button');
@@ -86,19 +87,43 @@ addImageButton.addEventListener('click', addImage)
 
 function addInfo (e) {
     e.preventDefault()
+    // classifier.addImage('phone');
+    let productInformation = JSON.stringify({
+        'brand': document.getElementById('brand').value,
+        'name': document.getElementById('name').value,
+        'description': document.getElementById('description').value,
+        'image': document.getElementById('image').value,
+        'average-shelf-life': document.getElementById('average-shelf-life').value,
+        'average-shelf-life-type': document.getElementById('average-shelf-life-type').value,
+        'size': document.getElementById('size').value,
+        'size-type': document.getElementById('size-type').value,
+        'category': document.getElementById('product-category').value,
+        'status': 0,
+        'user_id': 0,
+    })
+
+    console.log(productInformation)
+    const files = imageFilesInput.files;
+    if (files.length > 0) {
+        for (let file of files) {
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+
+            img.style.height = '200px'
+            img.style.width = '200px'
+            img.addEventListener('load', () => {
+                console.log(img)
+                classifier.addImage(img, productInformation);
+            });
+
+            // console.log(img)
+            // classifier.addImage(img, productInformation);
+        }
+    } else {
+        alert('Please select at least one image file.');
+    }
 }
 
 function addImage (e) {
     e.preventDefault()
-    // classifier.addImage('phone');
-    let product = {
-        'category': document.getElementById('product-category').value,
-        'brand': document.getElementById('brand').value,
-        'name': document.getElementById('name').value,
-        'size-type': document.getElementById('size-type').value,
-        'size': document.getElementById('size').value,
-        'date-type': document.getElementById('date-type').value,
-        'best-before-time': document.getElementById('best-before-time').value,
-    }
-    classifier.addImage(product);
 }

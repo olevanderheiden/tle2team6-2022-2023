@@ -1,5 +1,10 @@
 //todo: add later in the scratch.js file!!
 
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('hidden-if-new').style.display = 'none';
+})
+
+
 const productSelector = document.getElementById('product');
 const sizeTypeSelector = document.getElementById('size-type');
 const sizeInput = document.getElementById('size');
@@ -29,16 +34,10 @@ function UpdateReadableSize() {
     }
 }
 
-document.getElementById('date-type').addEventListener('change', (e) => {
-    document.getElementById('date-notation').innerHTML = `dagen tot ${e.target.value}-datum`
+document.getElementById('image').addEventListener('change', (e) => {
+    document.getElementById('preview-image').src = e.target.value
 })
 
-let product = {
-    'category': document.getElementById('product-category').value,
-    'brand': document.getElementById('brand').value,
-    'name': document.getElementById('name').value,
-    'size-type': document.getElementById('size-type').value,
-    'size': document.getElementById('size').value,
-    'date-type': document.getElementById('date-type').value,
-    'best-before-time': document.getElementById('best-before-time').value,
-}
+document.getElementById('average-shelf-life-type').addEventListener('change', (e) => {
+    document.getElementById('date-notation').innerHTML = `dagen tot ${e.target.value}-datum`
+})
