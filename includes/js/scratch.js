@@ -14,6 +14,16 @@ const result = document.getElementById('result');
 const confidence = document.getElementById('confidence');
 const predict = document.getElementById('predict');
 
+const productSelector = document.getElementById('product');
+const sizeTypeSelector = document.getElementById('size-type');
+const sizeInput = document.getElementById('size');
+
+const modelURL = '../training/model/model.json'
+
+//
+// ML5 related code
+//
+
 // A variable to store the total loss
 let totalLoss = 0;
 
@@ -30,10 +40,11 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 // A function to be called when the model has been loaded
 function modelLoaded() {
     loading.innerText = 'Model loaded!';
-    // classifier.load('./model/model.json', function() {
-    //     loading.innerText = 'Model and custom model loaded!';
-    //     classifier.classify(gotResults);
-    // })
+    classifier.load(modelURL, function() {
+        loading.innerText = 'Model and custom model loaded!';
+        // add this to client-side eventually
+        // classifier.classify(gotResults);
+    })
 }
 
 // Extract the already learned features from MobileNet
@@ -93,13 +104,13 @@ function addInfo (e) {
         'name': document.getElementById('name').value,
         'description': document.getElementById('description').value,
         'image': document.getElementById('image').value,
-        'average-shelf-life': document.getElementById('average-shelf-life').value,
-        'average-shelf-life-type': document.getElementById('average-shelf-life-type').value,
+        'averageShelfLife': document.getElementById('average-shelf-life').value,
+        'averageShelfLifeType': document.getElementById('average-shelf-life-type').value,
         'size': document.getElementById('size').value,
-        'size-type': document.getElementById('size-type').value,
+        'sizeType': document.getElementById('size-type').value,
         'category': document.getElementById('product-category').value,
         'status': 0,
-        'user_id': 0,
+        'userId': 0,
     })
 
     console.log(productInformation)
@@ -127,3 +138,66 @@ function addInfo (e) {
 function addImage (e) {
     e.preventDefault()
 }
+
+//
+//Form Related code
+//
+
+//Do stuff when page is loaded
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('hidden-if-new').style.display = 'none';
+})
+
+productSelector.addEventListener('change', (e) => {
+    if (e.target.value === 'new') {
+        document.getElementById('hidden-if-new').style.display = 'none';
+        document.getElementById('hidden-if-existing').style.display = 'block';
+    } else {
+        document.getElementById('hidden-if-new').style.display = 'block';
+        document.getElementById('hidden-if-existing').style.display = 'none';
+    }
+})
+
+sizeTypeSelector.addEventListener('change', (e) => {
+    document.getElementById('size-notation').innerHTML = e.target.value
+    UpdateReadableSize()
+})
+
+document.getElementById('size').addEventListener('change', UpdateReadableSize)
+
+function UpdateReadableSize() {
+    if (sizeTypeSelector.value === 'ML') {
+        document.getElementById('readable-size').innerHTML = ` (= ${sizeInput.value / 1000}L)`
+    } else if (sizeTypeSelector.value === 'Gram') {
+        document.getElementById('readable-size').innerHTML = ` (= ${sizeInput.value / 1000}KG)`
+    }
+}
+
+document.getElementById('image').addEventListener('change', (e) => {
+    document.getElementById('preview-image').src = e.target.value
+})
+
+document.getElementById('average-shelf-life-type').addEventListener('change', (e) => {
+    document.getElementById('date-notation').innerHTML = `dagen tot ${e.target.value}-datum`
+})
+
+//Add available data
+let availableLabels = [];
+
+fetch(modelURL)
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+        availableLabels = data.ml5Specs.mapStringToIndex;
+        for (let item of availableLabels) {
+            let option = document.createElement('option')
+            console.log(item)
+            let product = JSON.parse(item);
+            option.innerHTML = `${product.brand} ${product.name} ${product.size} ${product.sizeType}`;
+            option.value = item;
+            document.getElementById('item-select').appendChild(option)
+        }
+        // console.log(availableLabels.ml5Specs.mapStringToIndex);
+        // Continue with your desired logic using the availableLabels
+    });

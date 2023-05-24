@@ -1,10 +1,13 @@
 <?php
-require_once ('../components/head.php')
+require_once ('../components/head.php');
+InitHead('Admin Training');
 ?>
-
 <body>
-<h2>Image Classification using Feature Extraction with MobileNet</h2>
-<h3>(Train a Neural Network to distinguish between Headphone, Phone or Bottle images)</h3>
+<h2>Admin Page</h2>
+<h3>On this page the admin can train and download the model</h3>
+
+<!--ToDo: add option to choose between camera or images-->
+
 <video id="video" width="640" height="480" autoplay></video>
 
 <h6><span id="loading">Loading base model...</span> | <span id="video-status">Loading video...</span></h6>
@@ -26,7 +29,7 @@ require_once ('../components/head.php')
         <textarea id="description"></textarea><br />
         <label for="image">Voorbeeldafbeelding</label><br />
         <input id="image" type="text"/><br />
-        <img id="preview-image" src=""><br />
+        <img id="preview-image" src="" alt="voorbeeldafbeelding vanuit het vorige tekstveld"><br />
         <label for="average-shelf-life-type">Type Houdbaarheidsdatum</label><br />
         <select id="average-shelf-life-type">
             <option value="THT" selected>Tenminste Houdbaar tot</option>
@@ -55,18 +58,14 @@ require_once ('../components/head.php')
             <option value="leftovers_canned">Restjes en ingeblikt</option>
             <option value="other">Overig</option>
         </select><br />
-
+        <br />
         <button id="add-info-button">Product Toevoegen aan lijst</button><br />
     </div>
 
     <div id="hidden-if-new">
-        <label for="brand-select">Merk</label><br />
-        <select id="brand-select"></select><br />
-        <label for="name-select">Naam</label><br />
-        <select id="name-select"></select><br />
-        <label for="size-select">Grootte</label><br />
-        <select id="size-select"></select><br />
-
+        <label for="item-select">Kies hieronder het bestaande product</label><br />
+        <select id="item-select"></select><br />
+        <br />
         <button id="add-image-button">Afbeelding Toevoegen aan Model</button><br />
     </div>
 </form>
