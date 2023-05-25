@@ -7,6 +7,9 @@ const addInfoButton = document.getElementById('add-info-button');
 const addImageButton = document.getElementById('add-image-button');
 const imageFilesInput = document.getElementById('training-data');
 
+const source = document.getElementById('source');
+let trainingSource = "image";
+
 const train = document.getElementById('train');
 const saveButton = document.getElementById('save-button');
 const loss = document.getElementById('loss');
@@ -29,7 +32,7 @@ let totalLoss = 0;
 
 // Create a webcam capture
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
+    navigator.mediaDevices.getUserMedia({video: true}).then(function (stream) {
         video.srcObject = stream;
         video.onloadedmetadata = () => {
             video.play();
@@ -40,7 +43,7 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 // A function to be called when the model has been loaded
 function modelLoaded() {
     loading.innerText = 'Model loaded!';
-    classifier.load(modelURL, function() {
+    classifier.load(modelURL, function () {
         loading.innerText = 'Model and custom model loaded!';
         // add this to client-side eventually
         // classifier.classify(gotResults);
@@ -59,8 +62,8 @@ function videoReady() {
 
 // When the train button is pressed, train the classifier
 // With all the given headphone, phone and bottle images
-train.onclick = function() {
-    classifier.train(function(lossValue) {
+train.onclick = function () {
+    classifier.train(function (lossValue) {
         if (lossValue) {
             totalLoss = lossValue;
             loss.innerHTML = `Loss: ${totalLoss}`;
@@ -71,7 +74,7 @@ train.onclick = function() {
 };
 
 // When the save button is pressed, save the model
-saveButton.onclick = function() {
+saveButton.onclick = function () {
     classifier.save();
 };
 
@@ -89,16 +92,15 @@ function gotResults(err, results) {
 }
 
 // Start predicting when the predict button is clicked
-predict.onclick = function() {
+predict.onclick = function () {
     classifier.classify(gotResults);
 }
 
 addInfoButton.addEventListener('click', addInfo)
 addImageButton.addEventListener('click', addImage)
 
-function addInfo (e) {
+function addInfo(e) {
     e.preventDefault()
-    // classifier.addImage('phone');
     let productInformation = JSON.stringify({
         'brand': document.getElementById('brand').value,
         'name': document.getElementById('name').value,
@@ -114,29 +116,54 @@ function addInfo (e) {
     })
 
     console.log(productInformation)
-    const files = imageFilesInput.files;
-    if (files.length > 0) {
-        for (let file of files) {
-            const img = new Image();
-            img.src = URL.createObjectURL(file);
 
-            img.style.height = '200px'
-            img.style.width = '200px'
-            img.addEventListener('load', () => {
-                console.log(img)
-                classifier.addImage(img, productInformation);
-            });
-
-            // console.log(img)
-            // classifier.addImage(img, productInformation);
-        }
+    if (trainingSource !== "image") {
+        classifier.addImage(video, productInformation);
     } else {
-        alert('Please select at least one image file.');
+        const files = imageFilesInput.files;
+        if (files.length > 0) {
+            for (let file of files) {
+                const img = new Image();
+                img.src = URL.createObjectURL(file);
+
+                img.style.height = '200px'
+                img.style.width = '200px'
+                img.addEventListener('load', () => {
+                    classifier.addImage(img, productInformation);
+                });
+            }
+        } else {
+            alert('Please select at least one image file.');
+        }
     }
 }
 
-function addImage (e) {
+function addImage(e) {
     e.preventDefault()
+
+    let productInformation = document.getElementById('item-select').value
+
+    console.log(productInformation)
+
+    if (trainingSource !== "image") {
+        classifier.addImage(video, productInformation);
+    } else {
+        const files = imageFilesInput.files;
+        if (files.length > 0) {
+            for (let file of files) {
+                const img = new Image();
+                img.src = URL.createObjectURL(file);
+
+                img.style.height = '200px'
+                img.style.width = '200px'
+                img.addEventListener('load', () => {
+                    classifier.addImage(img, productInformation);
+                });
+            }
+        } else {
+            alert('Please select at least one image file.');
+        }
+    }
 }
 
 //
@@ -144,7 +171,7 @@ function addImage (e) {
 //
 
 //Do stuff when page is loaded
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('hidden-if-new').style.display = 'none';
 })
 
@@ -155,6 +182,17 @@ productSelector.addEventListener('change', (e) => {
     } else {
         document.getElementById('hidden-if-new').style.display = 'block';
         document.getElementById('hidden-if-existing').style.display = 'none';
+    }
+})
+
+source.addEventListener('change', (e) => {
+    trainingSource = e.target.value;
+    if (e.target.value !== "image") {
+        document.getElementById('training-data').style.display = 'none';
+        document.getElementById('training-data-label').style.display = 'none';
+    } else {
+        document.getElementById('training-data').style.display = 'block';
+        document.getElementById('training-data-label').style.display = 'block';
     }
 })
 
@@ -198,6 +236,4 @@ fetch(modelURL)
             option.value = item;
             document.getElementById('item-select').appendChild(option)
         }
-        // console.log(availableLabels.ml5Specs.mapStringToIndex);
-        // Continue with your desired logic using the availableLabels
     });

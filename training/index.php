@@ -6,18 +6,21 @@ InitHead('Admin Training');
 <h2>Admin Page</h2>
 <h3>On this page the admin can train and download the model</h3>
 
-<!--ToDo: add option to choose between camera or images-->
-
-<video id="video" width="640" height="480" autoplay></video>
+<video id="video" width="200" height="200" autoplay></video>
 
 <h6><span id="loading">Loading base model...</span> | <span id="video-status">Loading video...</span></h6>
 <form id="">
+    <label for="source">Bron</label><br />
+    <select id="source">
+        <option value="image" selected>Afbeeldingen</option>
+        <option value="video">Camera</option>
+    </select><br />
     <label for="product">Welk Product?</label><br />
     <select id="product">
         <option value="new" selected>Nieuw product</option>
         <option value="existing">Bestaand product</option>
     </select><br />
-    <label for="training-data">Kies trainingsbestanden</label><br />
+    <label id="training-data-label" for="training-data">Kies trainingsbestanden</label><br />
     <input id="training-data" accept="image/*" type="file" multiple/><br />
 
     <div id="hidden-if-existing">
@@ -29,7 +32,7 @@ InitHead('Admin Training');
         <textarea id="description"></textarea><br />
         <label for="image">Voorbeeldafbeelding</label><br />
         <input id="image" type="text"/><br />
-        <img id="preview-image" src="" alt="voorbeeldafbeelding vanuit het vorige tekstveld"><br />
+        <img id="preview-image" src="" alt="" aria-hidden="true"><br />
         <label for="average-shelf-life-type">Type Houdbaarheidsdatum</label><br />
         <select id="average-shelf-life-type">
             <option value="THT" selected>Tenminste Houdbaar tot</option>
@@ -79,8 +82,6 @@ InitHead('Admin Training');
     <button id="predict">Start guessing!</button><br />
     My guess is: <span id="result">...</span>
     , with a confidence of <span id="confidence">...</span>.
-    <br />
-    My guess is (CLEAN): <span id="result_clean">...</span>
 </p>
 <script src="../includes/js/scratch.js"></script>
 </body>
