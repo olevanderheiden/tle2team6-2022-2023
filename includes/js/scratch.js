@@ -9,9 +9,8 @@ const imageFilesInput = document.getElementById('training-data'); // Input for i
 
 const source = document.getElementById('source'); // Source selection element
 let trainingSource = 'image'; // Variable to store the selected training source
-let newOrExisting = 'new'; // Variable to store whether new or existing data is selected
 
-const train = document.getElementById('train'); // Train button
+const trainButton = document.getElementById('train'); // Train button
 const saveButton = document.getElementById('save-button'); // Save button
 const loss = document.getElementById('loss'); // Element to display loss
 const result = document.getElementById('result'); // Element to display prediction result
@@ -54,17 +53,18 @@ function videoReady() {
     videoStatus.innerText = 'Video ready!';
 }
 
-// When the train button is pressed, train the classifier
-train.onclick = function () {
+trainButton.onclick = function () {
+// When the train button is pressed, train the classifier) {
     classifier.train(function (lossValue) {
         if (lossValue) {
             totalLoss = lossValue;
             loss.innerHTML = `Loss: ${totalLoss}`;
         } else {
             loss.innerHTML = `Done Training! Final Loss: ${totalLoss}`;
+            document.getElementById('hidden-if-not-trained').style.display = 'block';
         }
     });
-};
+}
 
 // When the save button is pressed, save the model
 saveButton.onclick = function () {
@@ -90,33 +90,57 @@ predict.onclick = function () {
 };
 
 // Event listeners for adding new data
-addInfoButton.addEventListener('click', addNewData);
-addImageButton.addEventListener('click', addNewData);
+addInfoButton.addEventListener('click', addNewClass);
+addImageButton.addEventListener('click', addNewImage);
 
-function addNewData(e) {
+function addNewClass(e) {
     e.preventDefault();
-    let productInformation;
 
-    if (document.getElementById('product').value === 'new') {
-        // Create a new product information object
-        productInformation = JSON.stringify({
-            'brand': document.getElementById('brand').value,
-            'name': document.getElementById('name').value,
-            'description': document.getElementById('description').value,
-            'image': document.getElementById('image').value,
-            'averageShelfLife': document.getElementById('average-shelf-life').value,
-            'averageShelfLifeType': document.getElementById('average-shelf-life-type').value,
-            'size': document.getElementById('size').value,
-            'sizeType': document.getElementById('size-type').value,
-            'category': document.getElementById('product-category').value,
-            'status': 0,
-            'userId': 0,
-        });
-    } else {
-        // Use existing product information
-        productInformation = document.getElementById('item-select').value;
+    // Create a new product information object
+    let productInformation = JSON.stringify({
+        'brand': document.getElementById('brand').value,
+        'name': document.getElementById('name').value,
+        'description': document.getElementById('description').value,
+        'image': document.getElementById('image').value,
+        'averageShelfLife': document.getElementById('average-shelf-life').value,
+        'averageShelfLifeType': document.getElementById('average-shelf-life-type').value,
+        'size': document.getElementById('size').value,
+        'sizeType': document.getElementById('size-type').value,
+        'category': document.getElementById('product-category').value,
+        'status': 0,
+        'userId': 0,
+    });
+
+    trainingSourceHanlder(productInformation)
+
+    // Check if the option already exists
+
+    if (!doesOptionExists(productInformation)) {
+        // Add a new option to the product selection dropdown
+        let option = document.createElement('option');
+        let product = JSON.parse(productInformation);
+        option.innerHTML = `${product.brand} ${product.name} ${product.size} ${product.sizeType}`;
+        option.value = productInformation;
+        document.getElementById('item-select').appendChild(option);
     }
 
+    productSelector.value = 'existing';
+    document.getElementById('hidden-if-new').style.display = 'block';
+    document.getElementById('hidden-if-existing').style.display = 'none';
+
+    document.getElementById('hidden-if-no-data').style.display = 'block';
+}
+
+function addNewImage(e) {
+    e.preventDefault();
+
+    // Use existing product information
+    let productInformation = document.getElementById('item-select').value;
+
+    trainingSourceHanlder(productInformation)
+}
+
+function trainingSourceHanlder(productInformation) {
     if (trainingSource !== 'image') {
         // Add image from video to the classifier
         classifier.addImage(video, productInformation);
@@ -124,32 +148,32 @@ function addNewData(e) {
         const files = imageFilesInput.files;
         if (files.length > 0) {
             for (let file of files) {
-                const img = new Image();
-                img.src = URL.createObjectURL(file);
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const img = new Image();
+                    img.src = event.target.result;
 
-                img.style.height = '200px';
-                img.style.width = '200px';
-                img.addEventListener('load', () => {
-                    classifier.addImage(img, productInformation);
-                });
-            }
-
-            if (newOrExisting === 'new') {
-                // Add a new option to the product selection dropdown
-                let option = document.createElement('option');
-                let product = JSON.parse(productInformation);
-                option.innerHTML = `${product.brand} ${product.name} ${product.size} ${product.sizeType}`;
-                option.value = productInformation;
-                document.getElementById('item-select').appendChild(option);
-
-                productSelector.value = 'existing';
-                document.getElementById('hidden-if-new').style.display = 'block';
-                document.getElementById('hidden-if-existing').style.display = 'none';
+                    img.onload = function () {
+                        classifier.addImage(img, productInformation);
+                    };
+                };
+                reader.readAsDataURL(file);
             }
         } else {
             alert('Please select at least one image file.');
         }
     }
+}
+
+// Function to check if the option already exists
+function doesOptionExists(productInformation) {
+    let options = document.getElementById('item-select').options;
+    for (let i = 0; i < options.length; i++) {
+        if (options[i].value === productInformation) {
+            return true;
+        }
+    }
+    return false;
 }
 
 //
@@ -164,11 +188,9 @@ document.addEventListener('DOMContentLoaded', function () {
 // Event listener for product selection change
 productSelector.addEventListener('change', (e) => {
     if (e.target.value === 'new') {
-        newOrExisting = 'new';
         document.getElementById('hidden-if-new').style.display = 'none';
         document.getElementById('hidden-if-existing').style.display = 'block';
     } else {
-        newOrExisting = 'existing';
         document.getElementById('hidden-if-new').style.display = 'block';
         document.getElementById('hidden-if-existing').style.display = 'none';
     }

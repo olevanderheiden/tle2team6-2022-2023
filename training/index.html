@@ -22,12 +22,12 @@
         <option value="image" selected>Afbeeldingen</option>
         <option value="video">Camera</option>
     </select><br />
-    <label for="product">Welk Product?</label><br />
+    <label for="product">Is het product al bekend bij het algoritme?</label><br />
     <select id="product">
-        <option value="new" selected>Nieuw product</option>
-        <option value="existing">Bestaand product</option>
+        <option value="new" selected>Nee, dit is nieuw product</option>
+        <option value="existing">Ja, dit product is al bekend</option>
     </select><br />
-    <label id="training-data-label" for="training-data">Kies trainingsbestanden</label><br />
+    <label id="training-data-label" for="training-data">Kies 1 of meer afbeeldingen</label><br />
     <input id="training-data" accept="image/*" type="file" multiple/><br />
 
     <div id="hidden-if-existing">
@@ -81,15 +81,19 @@
 </form>
 
 <br />
-<p><button id="train">Train</button><span id="loss"></span></p>
-<br />
-<p><button id="save-button">Save</button></p>
-<br />
-<p>
-    <button id="predict">Start guessing!</button><br />
-    My guess is: <span id="result">...</span>
-    , with a confidence of <span id="confidence">...</span>.
-</p>
+<div id="hidden-if-no-data" style="display: none">
+    <p><button id="train">Train</button><span id="loss"></span></p>
+    <br />
+</div>
+<div id="hidden-if-not-trained" style="display: none">
+    <p><button id="save-button">Download model.json</button></p>
+    <br />
+    <p>
+        <button id="predict">Start guessing!</button><br />
+        My guess is: <span id="result">...</span>
+        , with a confidence of <span id="confidence">...</span>.
+    </p>
+</div>
 <script src="../includes/js/scratch.js"></script>
 </body>
 </html>
