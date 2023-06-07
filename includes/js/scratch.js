@@ -58,7 +58,7 @@ trainButton.onclick = function () {
     classifier.train(function (lossValue) {
         if (lossValue) {
             totalLoss = lossValue;
-            loss.innerHTML = `Loss: ${totalLoss}`;
+            loss.innerHTML = `Were training! Current Loss: ${totalLoss}`;
         } else {
             loss.innerHTML = `Done Training! Final Loss: ${totalLoss}`;
             document.getElementById('hidden-if-not-trained').style.display = 'block';
@@ -122,13 +122,18 @@ function addNewClass(e) {
         option.innerHTML = `${product.brand} ${product.name} ${product.size} ${product.sizeType}`;
         option.value = productInformation;
         document.getElementById('item-select').appendChild(option);
+    } else {
+        return;
     }
 
     productSelector.value = 'existing';
     document.getElementById('hidden-if-new').style.display = 'block';
     document.getElementById('hidden-if-existing').style.display = 'none';
 
-    document.getElementById('hidden-if-no-data').style.display = 'block';
+    if (document.getElementById('item-select').children.length >= 2) {
+        document.getElementById('hidden-if-no-data').style.display = 'block';
+        document.getElementById('hidden-if-data').style.display = 'none';
+    }
 }
 
 function addNewImage(e) {
@@ -141,9 +146,15 @@ function addNewImage(e) {
 }
 
 function trainingSourceHanlder(productInformation) {
+    let product = JSON.parse(productInformation);
+
     if (trainingSource !== 'image') {
         // Add image from video to the classifier
         classifier.addImage(video, productInformation);
+        console.log(video, productInformation)
+
+        document.getElementById('u-did-it').innerHTML = `Je hebt het algoritme succesvol 1 afbeelding van je camera geleerd voor het product ${product.brand} ${product.name}`;
+        document.getElementById('u-did-it').style.display = 'block';
     } else {
         const files = imageFilesInput.files;
         if (files.length > 0) {
@@ -155,10 +166,14 @@ function trainingSourceHanlder(productInformation) {
 
                     img.onload = function () {
                         classifier.addImage(img, productInformation);
+                        console.log(img, productInformation)
                     };
                 };
                 reader.readAsDataURL(file);
             }
+            document.getElementById('u-did-it').innerHTML = `Je hebt succesvol het algoritme ${files.length} afbeelding(en) geleerd voor het product ${product.brand} ${product.name}`;
+            document.getElementById('u-did-it').style.display = 'block';
+
         } else {
             alert('Please select at least one image file.');
         }

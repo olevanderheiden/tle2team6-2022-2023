@@ -24,7 +24,7 @@
     </select><br />
     <label for="product">Is het product al bekend bij het algoritme?</label><br />
     <select id="product">
-        <option value="new" selected>Nee, dit is nieuw product</option>
+        <option value="new" selected>Nee, dit is een nieuw product</option>
         <option value="existing">Ja, dit product is al bekend</option>
     </select><br />
     <label id="training-data-label" for="training-data">Kies 1 of meer afbeeldingen</label><br />
@@ -54,7 +54,6 @@
         </select><br />
         <label for="size">Grootte</label><br />
         <input id="size" type="number"/> <span id="size-notation">ML</span><span id="readable-size"> (= 0L)</span><br />
-
         <label for="product-category">Productcategorie</label><br />
         <select id="product-category">
             <option value="dairy">Zuivel</option>
@@ -71,7 +70,6 @@
         <br />
         <button id="add-info-button">Product Toevoegen aan lijst</button><br />
     </div>
-
     <div id="hidden-if-new">
         <label for="item-select">Kies hieronder het bestaande product</label><br />
         <select id="item-select"></select><br />
@@ -79,7 +77,11 @@
         <button id="add-image-button">Afbeelding Toevoegen aan Model</button><br />
     </div>
 </form>
-
+<div id="u-did-it" style="background-color: darkgrey; display: none"></div>
+<br />
+<div id="hidden-if-data">
+    Trainen kan pas als je tenminste 2 verschillende producten hebt toegevoegd.
+</div>
 <br />
 <div id="hidden-if-no-data" style="display: none">
     <p><button id="train">Train</button><span id="loss"></span></p>
