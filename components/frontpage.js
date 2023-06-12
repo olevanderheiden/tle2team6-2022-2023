@@ -4,19 +4,20 @@ import FrontpageButton from "./frontpage-button";
 
 export default function Frontpage() {
   return (
-    <React.Fragment>
-      <Text>This is a frontpage</Text>
-
-      <FrontpageButton />
-    </React.Fragment>
+    <View style={styles.buttonContainer}>
+      <FrontpageButton test={1} />
+      <FrontpageButton test={2} />
+      <FrontpageButton test={3} />
+      <FrontpageButton test={4} />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+  buttonContainer: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    backgroundColor: "green",
+    height: "100%",
   },
 });

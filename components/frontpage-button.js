@@ -1,18 +1,22 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import React, { UseState } from "react";
 
-export default function FrontpageButton() {
+export default function FrontpageButton({ test }) {
   return (
-    <React.Fragment>
-      <Text> This is a button</Text>
-    </React.Fragment>
+    <Pressable style={styles.test} onPress={() => console.log({ test })}>
+      <Text style={styles.button}>This is a button</Text>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    justifyContent: "center",
+  button: {
+    backgroundColor: "red",
+    width: "100%",
+    aspectRatio: "1/1",
+  },
+  test: {
+    backgroundColor: "blue",
+    width: "50%",
   },
 });

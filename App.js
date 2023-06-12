@@ -14,7 +14,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Header />
-      <Stack.Navigator>
+      <Stack.Navigator style={styles.container}>
         <Stack.Screen name="Front" component={Frontpage} />
         <Stack.Screen name="List" component={Listpage} />
       </Stack.Navigator>
@@ -27,6 +27,6 @@ export default App;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "blue",
   },
 });
