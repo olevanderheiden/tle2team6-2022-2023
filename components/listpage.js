@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { UseState } from "react";
+import FrontpageButton from "./frontpage-button";
 
-export default function Frontpage() {
+export default function Listpage() {
   return (
     <React.Fragment>
       <Text>This is list page</Text>

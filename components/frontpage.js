@@ -1,15 +1,18 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { UseState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
 import FrontpageButton from "./frontpage-button";
+import Header from "./header";
 
 export default function Frontpage() {
   return (
-    <View style={styles.buttonContainer}>
-      <FrontpageButton test={1} />
-      <FrontpageButton test={2} />
-      <FrontpageButton test={3} />
-      <FrontpageButton test={4} />
-    </View>
+    <React.Fragment>
+      <View style={styles.buttonContainer}>
+        <FrontpageButton destination={"Listpage"} />
+        <FrontpageButton destination={"Account"} />
+        <FrontpageButton destination={"Settings"} />
+        <FrontpageButton destination={"CameraFeed"} />
+      </View>
+    </React.Fragment>
   );
 }
 
