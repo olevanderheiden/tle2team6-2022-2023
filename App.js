@@ -14,10 +14,11 @@ const App = () => {
   return (
     <NavigationContainer>
       <Header />
-      <Stack.Navigator>
+      {/* <Stack.Navigator>
         <Stack.Screen name="Front" component={Frontpage} />
         <Stack.Screen name="List" component={Listpage} />
-      </Stack.Navigator>
+      </Stack.Navigator> */}
+      <Listpage />
     </NavigationContainer>
   );
 };
