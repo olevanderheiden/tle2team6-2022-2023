@@ -7,10 +7,17 @@ export default function ListviewItem() {
         <FlatList data={[
             {id: '1', name: 'milk', tht: '01-02-1238', amount: '1'},
             {id: '2', name: 'butter', tht: '24-06-1984', amount: '3'},
-            {id: '3', name: 'something else', tht: '27-12-1998', amount: '5'}]}
+            {id: '3', name: 'something else', tht: '27-12-1998', amount: '5'},
+            {id: '4', name: 'something else', tht: '27-12-1998', amount: '5'},
+            {id: '5', name: 'something else', tht: '27-12-1998', amount: '5'},
+            {id: '6', name: 'something else', tht: '27-12-1998', amount: '5'},
+            {id: '7', name: 'something else', tht: '27-12-1998', amount: '5'},
+            {id: '8', name: 'something else', tht: '27-12-1998', amount: '5'},
+            {id: '9', name: 'something else', tht: '27-12-1998', amount: '5'},
+            {id: '10', name: 'something else', tht: '27-12-1998', amount: '5'},]}
             extraData={{}}
             renderItem={({item}) => (
-              <Pressable style={!selectedId.includes(item.id) ? styles.listItemWrapper : [styles.listItemWrapper, {backgroundColor: 'red'}]} onLongPress={() => {
+              <Pressable style={!selectedId.includes(item.id) ? styles.listItemWrapper : [styles.listItemWrapper, {backgroundColor: 'lightgrey'}]} onLongPress={() => {
                 if (!selectedId.includes(item.id)) {
                   setselectedId([...selectedId, item.id]);
                   return;
@@ -33,7 +40,7 @@ export default function ListviewItem() {
 const styles = StyleSheet.create({
     listItemWrapper: {
       padding: 10,
-      borderBottomWidth: 1,
+      borderBottomWidth: StyleSheet.hairlineWidth,
       borderBottomColor: "#aaa",
       flexDirection: "row",
       gap: 10,
