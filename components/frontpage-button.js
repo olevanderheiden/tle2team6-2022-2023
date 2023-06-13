@@ -1,41 +1,37 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React, { UseState } from "react";
-import Listpage from "./listpage";
-import Header from "./header";
 import { useNavigation } from "@react-navigation/native";
 
 export default function FrontpageButton({ destination }) {
   const navigation = useNavigation();
 
   return (
-    <Pressable
-      style={styles.button}
-      onPress={() => [
-        console.log(destination),
-        navigation.navigate(destination),
-      ]}
-    >
-      <View style={styles.buttonTextContainer}>
+    <View style={styles.buttonContainer}>
+      <Pressable
+        style={styles.button}
+        onPress={() => navigation.navigate(destination)}
+      >
         <Text style={styles.buttonText}>{destination} </Text>
-      </View>
-    </Pressable>
+      </Pressable>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  button: {
-    backgroundColor: "blue",
+  buttonContainer: {
     width: "50%",
   },
   buttonText: {
-    backgroundColor: "red",
+    backgroundColor: "#ffffff",
     width: "100%",
     aspectRatio: "1/1",
     color: "#629ade",
     fontSize: 20,
   },
-  buttonTextContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+  button: {
+    borderBottomColor: "gray",
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderRightcolor: "gray",
+    borderRightWidth: StyleSheet.hairlineWidth,
   },
 });
