@@ -7,7 +7,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator();
-
+function standardOptions(screenTitle) {
+  return {
+    title: screenTitle,
+    headerStyle: { backgroundColor: "#629ade" },
+    headerTintColor: "#fff",
+    headerBackTitleVisible: false,
+  };
+}
 export default function App() {
   return (
     <NavigationContainer>
@@ -15,21 +22,12 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{
-            title: "Fridge Friend",
-            headerStyle: { backgroundColor: "#629ade" },
-            headerTintColor: "#fff",
-            headerBackTitleVisible: false,
-          }}
+          options={standardOptions("Fridge Friend")}
         />
         <Stack.Screen
           name="Listpage"
           component={Listpage}
-          options={{
-            title: "Fridge Friend",
-            headerStyle: { backgroundColor: "#629ade" },
-            headerTintColor: "#fff",
-          }}
+          options={standardOptions("Fridge content")}
         />
         {/* <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Settings" component={Settings} /> */}
