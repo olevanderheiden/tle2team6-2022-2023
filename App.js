@@ -5,6 +5,8 @@ import Listpage from "./components/listpage";
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
+import Login from "./components/login";
+import Register from "./components/register";
 
 const Stack = createNativeStackNavigator();
 function standardOptions(screenTitle) {
@@ -28,6 +30,17 @@ export default function App() {
           name="Listpage"
           component={Listpage}
           options={standardOptions("Fridge content")}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={standardOptions("Login")}
+        />
+        
+        <Stack.Screen
+          name="Register"
+          component={Register}
+          options={standardOptions("Register")}
         />
         {/* <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Settings" component={Settings} /> */}

@@ -11,7 +11,7 @@ export default function Home() {
         <FrontpageButton destination={"Account"} />
         <FrontpageButton destination={"Settings"} />
         <FrontpageButton destination={"CameraFeed"} />
-        <FrontpageButton destination={"CameraFeed"} />
+        <FrontpageButton destination={"Login"} />
       </View>
     </React.Fragment>
   );
