@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "my-app",
-    "slug": "my-app",
+    "name": "Fridge_Friend",
+    "slug": "Fridge_Friend",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
