@@ -1,32 +1,49 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View, Text, Pressable } from "react-native";
-import Frontpage from "./components/frontpage";
+import Home from "./components/frontpage";
 import Listpage from "./components/listpage";
-import Header from "./components/header";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer } from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator();
 
-const App = () => {
+export default function App() {
   return (
     <NavigationContainer>
-      <Header />
-      <Stack.Navigator>
-        <Stack.Screen name="Front" component={Frontpage} />
-        <Stack.Screen name="List" component={Listpage} />
+      <Stack.Navigator initialRouteName="Frontpage">
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{
+            title: "Fridge Friend",
+            headerStyle: { backgroundColor: "#629ade" },
+            headerTintColor: "#fff",
+            headerBackTitleVisible: false,
+          }}
+        />
+        <Stack.Screen
+          name="Listpage"
+          component={Listpage}
+          options={{
+            title: "Fridge Friend",
+            headerStyle: { backgroundColor: "#629ade" },
+            headerTintColor: "#fff",
+          }}
+        />
+        {/* <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Settings" component={Settings} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
-};
-
-export default App;
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "blue",
+  },
+  stackScreen: {
+    color: "blue",
   },
 });
