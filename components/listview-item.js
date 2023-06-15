@@ -3,6 +3,58 @@ import React, { useState } from "react";
 
 export default function ListviewItem() {
     const [selectedId, setselectedId] = useState([]);
+    function UpdateDatabase(label) {
+      const url = '../includes/back-end-handlers/recognition-handler.php';
+      fetch(url, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ label: label }),
+      })
+          .then(response => {
+              if (response.ok) {
+                  return response.json();
+              } else {
+                  errorSound.play();
+                  throw new Error('Error updating label');
+              }
+          })
+          .then(responseText => {
+              successSound.play();
+              console.log(responseText);
+          })
+          .catch(error => {
+              errorSound.play();
+              console.error(error);
+          });
+  }
+  const [isloaded, setisLoaded] = useState(false);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        'https://stud.hosted.hr.nl/1000200/crimeWebservice/'
+      );
+      const jsonData = await response.json();
+      setcrimeData(jsonData);
+      setisLoaded(true)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if(!isloaded){
+    return(
+        <View>
+            <Text>Loading...</Text>
+        </View>
+    )
+  }
     return(
         <FlatList data={[
             {id: '1', name: 'milk', tht: '01-02-1238', amount: '1'},
