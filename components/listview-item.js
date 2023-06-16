@@ -1,8 +1,8 @@
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
+import ListviewRenderItem1 from "./listview-render-item";
 
 export default function ListviewItem() {
-    const [selectedId, setselectedId] = useState([]);
     const [data, setData] = useState([]);
     const [isloaded, setisLoaded] = useState(false);
 
@@ -11,11 +11,22 @@ export default function ListviewItem() {
     }, []);
 
     async function fetchData() {
-      const url = 'http://145.137.17.236/tle2team6-ml5-2022-2023/includes/back-end-handlers/list-item-get-handler.php';
+      const url = 'http://145.137.18.116/tle2team6-ml5-2022-2023/includes/back-end-handlers/list-item-get-handler.php';
       try {
         const response = await fetch(url)
-        const jsonData = await response.json();
-        console.log(jsonData)
+        let jsonData = await response.json();
+        for(let i = 0; i < Object.keys(jsonData).length; i++){
+          if(i !== 0 && jsonData[i].product_id == jsonData[i-1].product_id){
+            if(!jsonData[i - 1]["subItems"]){
+              jsonData[i - 1]["subItems"] = []
+              jsonData[i - 1]["amount"] = 1
+            }
+            jsonData[i - 1]["subItems"].push(jsonData[i])
+            jsonData[i - 1]["amount"] = jsonData[i - 1]["amount"] + 1
+            jsonData.splice(i, 1)
+            i--
+          }
+        }
         setData(jsonData);
         setisLoaded(true)
       } catch(error){
@@ -34,24 +45,7 @@ export default function ListviewItem() {
     return(
         <FlatList data={data}
             extraData={{}}
-            renderItem={({item}) => (
-              <Pressable style={!selectedId.includes(item.id) ? styles.listItemWrapper : [styles.listItemWrapper, {backgroundColor: 'lightgrey'}]} onLongPress={() => {
-                if (!selectedId.includes(item.id)) {
-                  setselectedId([...selectedId, item.id]);
-                  return;
-                } else {
-                  setselectedId(selectedId.filter((id) => id !== item.id));
-                  return;
-                }
-              }}>
-                  <Image source={require('../assets/icon.png')} style={{width: 50, height: 50}}/>
-                  <View style={styles.listNameWrapper}>
-                    <Text>{item.name}</Text>
-                    <Text>THT: <Text style={styles.alert}>{item.average_shelf_life}</Text></Text>
-                  </View>
-                  <Text style={styles.amount}>3X</Text>
-              </Pressable>
-            )}/>
+            renderItem={({item}) => (<ListviewRenderItem1 item={item}/>)}/>
     )
 }
 
