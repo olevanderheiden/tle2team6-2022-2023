@@ -11,9 +11,9 @@ export default function ListviewItem() {
     }, []);
 
     async function fetchData() {
-      //Check your expo ip everytime you 'npx expo start' and replace the ip
+      //Check your expo ip (under the QR code. remove 'exp://' and the port) everytime you 'npx expo start' and replace the ip
       //Also make sure the backend repo is up-to-date locally and xampp is running
-      const url = 'http://145.137.18.116/tle2team6-ml5-2022-2023/includes/back-end-handlers/list-item-get-handler.php';
+      const url = 'http://192.168.178.96/tle2team6-ml5-2022-2023/includes/back-end-handlers/list-item-get-handler.php';
       try {
         const response = await fetch(url)
         let jsonData = await response.json();
@@ -30,14 +30,14 @@ export default function ListviewItem() {
           }
         }
         setData(jsonData);
-        setisLoaded(true)
+        setIsLoaded(true)
       } catch(error){
         
         console.error(error);
       }
     }
 
-  if(!isloaded){
+  if(!isLoaded){
     return(
         <View>
             <Text>Loading...</Text>
