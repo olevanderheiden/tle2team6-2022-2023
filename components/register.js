@@ -1,64 +1,81 @@
-import { useState } from "react";
-import { SafeAreaView, TextInput, StyleSheet, View, Pressable, Text } from "react-native";
+import { SafeAreaView, TextInput, StyleSheet, View, Pressable, Text, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { useForm, Controller } from "react-hook-form";
+import CustomInput from "./custom-input";
 
 export default function Register() {
-    const [name, onChangeName] = useState('')
-    const [email, onChangeEmail] = useState('')
-    const [phonenumber, onChangePhonenumber] = useState('')
-    const [password, onChangePassword] = useState('')
-    const [passwordRepeat, onChangePasswordRepeat] = useState('')
+
+    const {control, handleSubmit, formState: {errors}} = useForm();
+
+    const onRegisterPressed = (data) => {
+        console.log(data)
+    }
+
     return(
-        <View style={styles.container}>
-        <TextInput
-            style={styles.input}
-            onChangeText={onChangeName}
-            placeholder="Naam"
-            value={name}
-        />
-        <TextInput
-            style={styles.input}
-            onChangeText={onChangeEmail}
-            placeholder="Email"
-            value={email}
-        />
-        <TextInput
-            style={styles.input}
-            onChangeText={onChangePhonenumber}
-            placeholder="Telefoonnummer"
-            value={phonenumber}
-        />
-        <TextInput
-            style={styles.input}
-            onChangeText={onChangePassword}
-            secureTextEntry={true}
-            placeholder="Wachtwoord"
-            value={password}
-        />
-        <TextInput
-            style={styles.input}
-            onChangeText={onChangePasswordRepeat}
-            secureTextEntry={true}
-            placeholder="Wachtwoord herhalen"
-            value={passwordRepeat}
-        />
-    </View>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <KeyboardAvoidingView style={styles.container}>
+                <CustomInput
+                    name="name"
+                    placeholder="Vul hier je naam in"
+                    control={control}
+                    rules={{required: 'Je moet een Naam invoeren'}}
+                    autoCapitalize="sentences"
+                    autoComplete="name"
+                />
+                <CustomInput
+                    name="email"
+                    placeholder="Vul hier je email adress in"
+                    control={control}
+                    rules={{required: 'Je moet een email invoeren'}}
+                    keyboardType="email-address"
+                    autoComplete="email"
+                />
+                <CustomInput
+                    name="phonenumber"
+                    placeholder="Vul hier je telefoonnummer in"
+                    control={control}
+                    rules={{required: 'Je moet een telefoonnummer invoeren'}}
+                    keyboardType="number-pad"
+                    autoComplete="tel"
+                />
+                <CustomInput
+                    name="password"
+                    placeholder="Vul hier je wachtwoord in"
+                    control={control}
+                    rules={{required: 'Je moet een wachtwoord invoeren'}}
+                    autoComplete="current-password"
+                />
+                <CustomInput
+                    name="repeatPassword"
+                    placeholder="Herhaal hier je wachtwoord"
+                    control={control}
+                    rules={{required: 'Je wachtwoord is niet hetzelfde'}}
+                />
+                <Pressable onPress={handleSubmit(onRegisterPressed)} style={styles.registerButton}>
+                    <Text>Register</Text>
+                </Pressable>
+            </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "space-around",
+        alignItems: "center"
     },
     input: {
         height: 40,
         margin: 12,
         borderWidth: 1,
         padding: 10,
+        width: 300
       },
-      register: {
-        alignSelf: "center",
-        color: "blue",
-        textDecorationLine: "underline"
+      registerButton: {
+        backgroundColor: "skyblue",
+        width:80,
+        padding: 10,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 10
       }
 })
