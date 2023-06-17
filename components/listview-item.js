@@ -1,39 +1,53 @@
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import ListviewRenderItem1 from "./listview-render-item";
 
 export default function ListviewItem() {
-    const [selectedId, setselectedId] = useState([]);
+    const [data, setData] = useState([]);
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    useEffect(() => {
+      fetchData();
+    }, []);
+
+    async function fetchData() {
+      //Check your expo ip everytime you 'npx expo start' and replace the ip
+      //Also make sure the backend repo is up-to-date locally and xampp is running
+      const url = 'http://145.137.18.116/tle2team6-ml5-2022-2023/includes/back-end-handlers/list-item-get-handler.php';
+      try {
+        const response = await fetch(url)
+        let jsonData = await response.json();
+        for(let i = 0; i < Object.keys(jsonData).length; i++){
+          if(i !== 0 && jsonData[i].product_id == jsonData[i-1].product_id){
+            if(!jsonData[i - 1]["subItems"]){
+              jsonData[i - 1]["subItems"] = []
+              jsonData[i - 1]["amount"] = 1
+            }
+            jsonData[i - 1]["subItems"].push(jsonData[i])
+            jsonData[i - 1]["amount"] = jsonData[i - 1]["amount"] + 1
+            jsonData.splice(i, 1)
+            i--
+          }
+        }
+        setData(jsonData);
+        setisLoaded(true)
+      } catch(error){
+        
+        console.error(error);
+      }
+    }
+
+  if(!isloaded){
     return(
-        <FlatList data={[
-            {id: '1', name: 'milk', tht: '01-02-1238', amount: '1'},
-            {id: '2', name: 'butter', tht: '24-06-1984', amount: '3'},
-            {id: '3', name: 'something else', tht: '27-12-1998', amount: '5'},
-            {id: '4', name: 'something else', tht: '27-12-1998', amount: '5'},
-            {id: '5', name: 'something else', tht: '27-12-1998', amount: '5'},
-            {id: '6', name: 'something else', tht: '27-12-1998', amount: '5'},
-            {id: '7', name: 'something else', tht: '27-12-1998', amount: '5'},
-            {id: '8', name: 'something else', tht: '27-12-1998', amount: '5'},
-            {id: '9', name: 'something else', tht: '27-12-1998', amount: '5'},
-            {id: '10', name: 'something else', tht: '27-12-1998', amount: '5'},]}
+        <View>
+            <Text>Loading...</Text>
+        </View>
+    )
+  }
+    return(
+        <FlatList data={data}
             extraData={{}}
-            renderItem={({item}) => (
-              <Pressable style={!selectedId.includes(item.id) ? styles.listItemWrapper : [styles.listItemWrapper, {backgroundColor: 'lightgrey'}]} onLongPress={() => {
-                if (!selectedId.includes(item.id)) {
-                  setselectedId([...selectedId, item.id]);
-                  return;
-                } else {
-                  setselectedId(selectedId.filter((id) => id !== item.id));
-                  return;
-                }
-              }}>
-                  <Image source={require('../assets/icon.png')} style={{width: 50, height: 50}}/>
-                  <View style={styles.listNameWrapper}>
-                    <Text>{item.name}</Text>
-                    <Text>THT: <Text style={styles.alert}>{item.tht}</Text></Text>
-                  </View>
-                  <Text style={styles.amount}>{item.amount}X</Text>
-              </Pressable>
-            )}/>
+            renderItem={({item}) => (<ListviewRenderItem1 item={item}/>)}/>
     )
 }
 
