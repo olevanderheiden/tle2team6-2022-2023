@@ -15,10 +15,6 @@ export default function FrontpageButton({ destination }) {
   );
 }
 const styles = StyleSheet.create({
-  buttonText: {
-    color: "#629ade",
-    fontSize: 20,
-  },
   button: {
     justifyContent: "center",
     alignItems: "center",
