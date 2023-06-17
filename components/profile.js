@@ -7,8 +7,7 @@ export default function Profile() {
       <Text>Your Profile will load here</Text>
     </View>
   );
-} 
-
+}
 
 const styles = StyleSheet.create({
   container: {

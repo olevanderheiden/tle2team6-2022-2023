@@ -1,27 +1,19 @@
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  TouchableHighlight,
-} from "react-native";
+import { StyleSheet, Text, TouchableHighlight } from "react-native";
 import React, { UseState } from "react";
 import { useNavigation } from "@react-navigation/native";
-
+import FrontpageSvg from "../assets/frontpage_svg";
 export default function FrontpageButton({ destination }) {
   const navigation = useNavigation();
-
   return (
     <TouchableHighlight
       underlayColor="#eaeaea"
       style={styles.button}
-      onPressOut={() => navigation.navigate(destination)}
+      onPressOut={() => [navigation.navigate(destination)]}
     >
-      <Text style={styles.buttonText}>{destination} </Text>
+      <FrontpageSvg svg={destination} />
     </TouchableHighlight>
   );
 }
-
 const styles = StyleSheet.create({
   buttonText: {
     color: "#629ade",

@@ -8,7 +8,6 @@ export default function Home() {
       <FrontpageButton destination={"Listpage"} />
       <FrontpageButton destination={"Profile"} />
       <FrontpageButton destination={"Settings"} />
-      <FrontpageButton destination={"CameraFeed"} />
       <FrontpageButton destination={"LogOut"} />
     </View>
   );
@@ -21,5 +20,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#eaeaea",
     height: "100%",
   },
-  
 });

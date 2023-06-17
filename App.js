@@ -4,7 +4,6 @@ import Home from "./components/frontpage";
 import Listpage from "./components/listpage";
 import Profile from "./components/profile";
 import Settings from "./components/settings";
-import CameraFeed from "./components/camera-feed";
 import LogOut from "./components/log-out";
 import * as React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -44,11 +43,6 @@ export default function App() {
           name="Settings"
           component={Settings}
           options={standardOptions(`Settings`)}
-        />
-        <Stack.Screen
-          name="CameraFeed"
-          component={CameraFeed}
-          options={standardOptions(`Camera Feed`)}
         />
         <Stack.Screen
           name="LogOut"
