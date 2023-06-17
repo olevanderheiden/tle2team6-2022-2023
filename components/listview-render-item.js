@@ -3,16 +3,16 @@ import React, { useEffect, useState } from "react";
 
 export default function ListviewRenderItem1(item) {
     item = item.item
-    const [selectedId, setselectedId] = useState([]);
+    const [selectedId, setSelectedId] = useState([]);
     const [showDetails, setShowDetails] = useState(false)
     return(
         <React.Fragment>
             <Pressable style={!selectedId.includes(item.id) ? styles.listItemWrapper : [styles.listItemWrapper, {backgroundColor: 'lightgrey'}]} onLongPress={() => {
                 if (!selectedId.includes(item.id)) {
-                setselectedId([...selectedId, item.id]);
+                setSelectedId([...selectedId, item.id]);
                 return;
                 } else {
-                setselectedId(selectedId.filter((id) => id !== item.id));
+                setSelectedId(selectedId.filter((id) => id !== item.id));
                 return;
                 }
             }}
