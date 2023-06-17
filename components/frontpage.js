@@ -5,10 +5,10 @@ import FrontpageButton from "./frontpage-button";
 export default function Home() {
   return (
     <View style={styles.container}>
-      <FrontpageButton destination={"Listpage"} />
-      <FrontpageButton destination={"Profile"} />
-      <FrontpageButton destination={"Settings"} />
-      <FrontpageButton destination={"LogOut"} />
+      <FrontpageButton destination={"Listpage"} cleanText={"Content list"} />
+      <FrontpageButton destination={"Profile"} cleanText={"Profile"} />
+      <FrontpageButton destination={"Settings"} cleanText={"Settings"} />
+      <FrontpageButton destination={"LogOut"} cleanText={"Log out"} />
     </View>
   );
 }
