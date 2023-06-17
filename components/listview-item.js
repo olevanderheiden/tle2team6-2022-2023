@@ -4,13 +4,15 @@ import ListviewRenderItem1 from "./listview-render-item";
 
 export default function ListviewItem() {
     const [data, setData] = useState([]);
-    const [isloaded, setisLoaded] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
       fetchData();
     }, []);
 
     async function fetchData() {
+      //Check your expo ip everytime you 'npx expo start' and replace the ip
+      //Also make sure the backend repo is up-to-date locally and xampp is running
       const url = 'http://145.137.18.116/tle2team6-ml5-2022-2023/includes/back-end-handlers/list-item-get-handler.php';
       try {
         const response = await fetch(url)
