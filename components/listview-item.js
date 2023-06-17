@@ -52,24 +52,23 @@ export default function ListviewItem() {
 }
 
 const styles = StyleSheet.create({
-    listItemWrapper: {
-      padding: 10,
-      borderBottomWidth: StyleSheet.hairlineWidth,
-      borderBottomColor: "#aaa",
-      flexDirection: "row",
-      gap: 10,
-    },
-    listNameWrapper: {
-      alignSelf: "center",
-    },
-    amount: {
-      fontSize: 26,
-      alignSelf: "center",
-      marginLeft: 'auto',
-    },
-    alert: {
-      color: "red",
-      fontWeight: "bold",
-    },
-  });
-  
+  listItemWrapper: {
+    padding: 10,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "#aaa",
+    flexDirection: "row",
+    gap: 10,
+  },
+  listNameWrapper: {
+    alignSelf: "center",
+  },
+  amount: {
+    fontSize: 26,
+    alignSelf: "center",
+    marginLeft: "auto",
+  },
+  alert: {
+    color: "red",
+    fontWeight: "bold",
+  },
+});

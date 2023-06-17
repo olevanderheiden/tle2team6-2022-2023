@@ -1,4 +1,12 @@
-import { FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 import ListpageButton from "./listpage-button";
 import DropdownFilter from "./dropdown-filter";
@@ -9,12 +17,8 @@ export default function Listpage() {
     <React.Fragment>
       <DropdownFilter />
       <View style={styles.buttonContainer}>
-        <ListpageButton
-          name={'Edit'}
-        />
-        <ListpageButton
-          name={'Delete'}
-        />
+        <ListpageButton name={"Edit"} />
+        <ListpageButton name={"Delete"} />
       </View>
       <SafeAreaView style={styles.container}>
         <ListviewItem />
@@ -41,7 +45,7 @@ const styles = StyleSheet.create({
   amount: {
     fontSize: 26,
     alignSelf: "center",
-    marginLeft: 'auto',
+    marginLeft: "auto",
   },
   alert: {
     color: "red",
@@ -52,7 +56,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#aaa",  
+    borderBottomColor: "#aaa",
     backgroundColor: "#eeeeee",
   },
   buttonStyle: {
