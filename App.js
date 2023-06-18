@@ -9,7 +9,7 @@ import * as React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
-const profileName = "TestUser";
+export const profileName = "TestUser";
 const Stack = createNativeStackNavigator();
 function standardOptions(screenTitle) {
   return {
