@@ -1,8 +1,8 @@
-import { StyleSheet, Text, TouchableHighlight } from "react-native";
+import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import React, { UseState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import FrontpageSvg from "../assets/frontpage_svg";
-export default function FrontpageButton({ destination }) {
+export default function FrontpageButton({ destination, cleanText }) {
   const navigation = useNavigation();
   return (
     <TouchableHighlight
@@ -10,11 +10,19 @@ export default function FrontpageButton({ destination }) {
       style={styles.button}
       onPressOut={() => [navigation.navigate(destination)]}
     >
-      <FrontpageSvg svg={destination} />
+      <View>
+        <FrontpageSvg svg={destination} />
+        <Text style={styles.text}>{cleanText}</Text>
+      </View>
     </TouchableHighlight>
   );
 }
 const styles = StyleSheet.create({
+  text: {
+    alignSelf: "center",
+    color: "#629ade",
+    fontSize: 20,
+  },
   button: {
     justifyContent: "center",
     alignItems: "center",
