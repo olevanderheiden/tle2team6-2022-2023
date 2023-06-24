@@ -2,9 +2,12 @@ import { Pressable, StyleSheet, Text } from "react-native";
 import React from "react";
 
 export default function ListpageButton({ name }) {
+  function deleteData() {
+  }
+
   return (
     <React.Fragment>
-      <Pressable onPress={() => {}}>
+      <Pressable onPress={() => deleteData()}>
         <Text style={styles.buttonStyle}>{name}</Text>
       </Pressable>
     </React.Fragment>
