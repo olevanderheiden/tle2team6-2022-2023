@@ -2,8 +2,6 @@ import { Pressable, StyleSheet, Text } from "react-native";
 import React from "react";
 
 export default function ListpageButton({ name }) {
-  function deleteData() {
-  }
 
   return (
     <React.Fragment>
