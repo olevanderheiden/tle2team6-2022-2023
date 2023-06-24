@@ -4,11 +4,7 @@ import React from "react";
 export default function ListpageButton({ name, buttonHandler }) {
   return (
     <React.Fragment>
-      <Pressable
-        onPress={() => {
-          buttonHandler;
-        }}
-      >
+      <Pressable onPress={buttonHandler}>
         <Text style={styles.buttonStyle}>{name}</Text>
       </Pressable>
     </React.Fragment>

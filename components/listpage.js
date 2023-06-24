@@ -13,20 +13,7 @@ import DropdownFilter from "./dropdown-filter";
 import ListviewItem from "./listview-item";
 
 export default function Listpage() {
-  return (
-    <React.Fragment>
-      <DropdownFilter />
-      <View style={styles.buttonContainer}>
-        <ListpageButton name={"Edit"} buttonHandler={editButtonHandler()} />
-        <ListpageButton name={"Delete"} buttonHandler={deleteButtonHandler()} />
-      </View>
-      <SafeAreaView style={styles.container}>
-        <ListviewItem />
-      </SafeAreaView>
-    </React.Fragment>
-  );
-
-  async function editButtonHandler() {
+  const editButtonHandler = async () => {
     const url =
       "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/product-user-update.php";
     try {
@@ -36,11 +23,13 @@ export default function Listpage() {
           "Content-Type": "application/json",
         },
       });
+      console.log("yay");
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
-  }
-  async function deleteButtonHandler() {
+  };
+
+  const deleteButtonHandler = async () => {
     const url =
       "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/delete-product-user-handler.php";
     try {
@@ -50,10 +39,23 @@ export default function Listpage() {
           "Content-Type": "application/json",
         },
       });
+      console.log("yay");
     } catch (error) {
       console.error(error);
     }
-  }
+  };
+  return (
+    <React.Fragment>
+      <DropdownFilter />
+      <View style={styles.buttonContainer}>
+        <ListpageButton name={"Edit"} buttonHandler={editButtonHandler} />
+        <ListpageButton name={"Delete"} buttonHandler={deleteButtonHandler} />
+      </View>
+      <SafeAreaView style={styles.container}>
+        <ListviewItem />
+      </SafeAreaView>
+    </React.Fragment>
+  );
 }
 
 const styles = StyleSheet.create({
