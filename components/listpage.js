@@ -104,15 +104,16 @@ export default function Listpage() {
     const url =
       "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/delete-product-user-handler.php";
     try {
-      await fetch(url, {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-        },
-        //put json vars here
-        body: ("") ,
+        },body: JSON.stringify({
+          productUserId : selected[0],
+        }),
       });
-      console.log("delete");
+      setSelected(selected.splice(1))
+      fetchData()
     } catch (error) {
       console.error(error);
     }
