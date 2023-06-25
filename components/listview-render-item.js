@@ -1,18 +1,20 @@
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import SelectedContext from "./selected-context";
 
 export default function ListviewRenderItem1(item) {
     item = item.item
-    const [selectedId, setSelectedId] = useState([]);
+    const {selected} = useContext(SelectedContext)
+    const {setSelected} = useContext(SelectedContext)
     const [showDetails, setShowDetails] = useState(false)
     return(
         <React.Fragment>
-            <Pressable style={!selectedId.includes(item.id) ? styles.listItemWrapper : [styles.listItemWrapper, {backgroundColor: 'lightgrey'}]} onLongPress={() => {
-                if (!selectedId.includes(item.id)) {
-                setSelectedId([...selectedId, item.id]);
+            <Pressable style={!selected.includes(item.id) ? styles.listItemWrapper : [styles.listItemWrapper, {backgroundColor: '#aaa'}]} onLongPress={() => {
+                if (!selected.includes(item.id)) {
+                setSelected([...selected, item.id]);
                 return;
                 } else {
-                setSelectedId(selectedId.filter((id) => id !== item.id));
+                setSelected(selected.filter((id) => id !== item.id));
                 return;
                 }
             }}
@@ -29,11 +31,19 @@ export default function ListviewRenderItem1(item) {
                     
                     <FlatList data={item.subItems}
                     renderItem={({item}) => (
-                        <View style={styles.detailWrapper}>
+                        <Pressable style={!selected.includes(item.id) ? styles.detailWrapper : [styles.detailWrapper, {backgroundColor: '#aaa'}]} onLongPress={() => {
+                            if (!selected.includes(item.id)) {
+                                setSelected([...selected, item.id]);
+                                return;
+                                } else {
+                                setSelected(selected.filter((id) => id !== item.id));
+                                return;
+                                }
+                        }}>
                             <View style={styles.detailItemWrapper}>
                                 <Text>Ten minste houdbaar tot <Text style={styles.alert}>{item.expiration_date}</Text></Text>
                             </View>
-                        </View>
+                        </Pressable>
                     )}/>
                 ): null}
           </React.Fragment>
@@ -44,7 +54,7 @@ const styles = StyleSheet.create({
     listItemWrapper: {
       padding: 10,
       borderBottomWidth: StyleSheet.hairlineWidth,
-      borderBottomColor: "#aaa",
+      borderBottomColor: "#999",
       flexDirection: "row",
       alignItems: "center",
       gap: 10,
@@ -68,11 +78,11 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     detailWrapper: {
-        backgroundColor: "#ccc"
+        backgroundColor: "#ddd"
     },
     detailItemWrapper: {
         borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: "#aaa",
+        borderBottomColor: "#999",
         padding: 10
     }
   });
