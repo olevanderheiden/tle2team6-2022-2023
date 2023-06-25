@@ -60,7 +60,6 @@ export default function Listpage() {
           "Content-Type": "application/json",
         },
       });
-      console.log("yay");
     } catch (error) {
       console.log(error);
     }
@@ -71,12 +70,15 @@ export default function Listpage() {
       "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/delete-product-user-handler.php";
     try {
       const response = await fetch(url, {
-        method: "DELETE",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
-        },
+        },body: JSON.stringify({
+          productUserId : selected[0],
+        }),
       });
-      console.log("yay");
+      setSelected(selected.splice(1))
+      fetchData()
     } catch (error) {
       console.error(error);
     }
