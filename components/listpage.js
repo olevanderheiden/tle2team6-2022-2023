@@ -6,60 +6,95 @@ import {
   StyleSheet,
   Text,
   View,
+  Modal
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import ListpageButton from "./listpage-button";
 import DropdownFilter from "./dropdown-filter";
 import ListviewItem from "./listview-item";
 import SelectedContext from "./selected-context";
+import DateTimePicker from "@react-native-community/datetimepicker"
 
 export default function Listpage() {
   const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [selected, setSelected] = useState([])
   const selectedState = {selected, setSelected}
-
+  const [date, setDate] = useState(new Date())
+  
   useEffect(() => {
     fetchData();
   }, []);
 
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    
+    setDate(currentDate);
+  };
+
+
   async function fetchData() {
     //Check your expo ip (under the QR code. remove 'exp://' and the port) everytime you 'npx expo start' and replace the ip
     //Also make sure the backend repo is up-to-date locally and xampp is running
-    const url = 'https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/list-item-get-handler.php';
+    const url =
+      "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/list-item-get-handler.php";
     try {
-      const response = await fetch(url)
+      const response = await fetch(url);
       let jsonData = await response.json();
-      for(let i = 0; i < Object.keys(jsonData).length; i++){
-        if(i !== 0 && jsonData[i].product_id == jsonData[i-1].product_id){
-          if(!jsonData[i - 1]["subItems"]){
-            jsonData[i - 1]["subItems"] = []
-            jsonData[i - 1]["amount"] = 1
+      for (let i = 0; i < Object.keys(jsonData).length; i++) {
+        if (i !== 0 && jsonData[i].product_id == jsonData[i - 1].product_id) {
+          if (!jsonData[i - 1]["subItems"]) {
+            jsonData[i - 1]["subItems"] = [];
+            jsonData[i - 1]["amount"] = 1;
           }
-          jsonData[i - 1]["subItems"].push(jsonData[i])
-          jsonData[i - 1]["amount"] = jsonData[i - 1]["amount"] + 1
-          jsonData.splice(i, 1)
-          i--
+          jsonData[i - 1]["subItems"].push(jsonData[i]);
+          jsonData[i - 1]["amount"] = jsonData[i - 1]["amount"] + 1;
+          jsonData.splice(i, 1);
+          i--;
         }
       }
       setData(jsonData);
-      setIsLoaded(true)
-    } catch(error){
-      
+      setIsLoaded(true);
+    } catch (error) {
       console.error(error);
     }
   }
 
-  const editButtonHandler = async () => {
+  const editButtonHandler = () => {
     const url =
       "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/product-user-update.php";
+      if(selected.length > 1){
+        alert("You can't edit multiple Items at once!")
+        return
+      } else if (selected.length <= 0){
+        alert("select an item first!")
+        return
+      }
     try {
-      const response = await fetch(url, {
-        method: "PUT",
+      fetch(url, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-      });
+        body: JSON.stringify({
+          productUserId : selected[0],
+          expirationDate : date
+        }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log("Relation updated successfully");
+            // Handle success case here
+          } else {
+            console.log("Failed to update relation");
+            // Handle error case here
+          }
+          fetchData()
+        })
+        .catch((error) => {
+          console.log("An error occurred:", error);
+          // Handle error case here
+        });
     } catch (error) {
       console.log(error);
     }
@@ -83,15 +118,23 @@ export default function Listpage() {
       console.error(error);
     }
   };
+
   return (
-    <SelectedContext.Provider value={selectedState}>
+    <SelectedContext.Provider value={selectedState}> 
+
       <DropdownFilter />
       <View style={styles.buttonContainer}>
-        <ListpageButton name={"Edit"} buttonHandler={editButtonHandler} />
+        <ListpageButton name={"Edit"} buttonHandler={editButtonHandler
+        } />
+        <DateTimePicker
+       value={date}
+       onChange={onChange}
+      />
         <ListpageButton name={"Delete"} buttonHandler={deleteButtonHandler} />
+       
       </View>
       <SafeAreaView style={styles.container}>
-        <ListviewItem data={data} isLoaded={isLoaded}/>
+        <ListviewItem data={data} isLoaded={isLoaded} />
       </SafeAreaView>
     </SelectedContext.Provider>
   );
