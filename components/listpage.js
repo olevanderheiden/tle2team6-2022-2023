@@ -7,23 +7,93 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ListpageButton from "./listpage-button";
 import DropdownFilter from "./dropdown-filter";
 import ListviewItem from "./listview-item";
+import SelectedContext from "./selected-context";
 
 export default function Listpage() {
+  const [data, setData] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [selected, setSelected] = useState([])
+  const selectedState = {selected, setSelected}
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    //Check your expo ip (under the QR code. remove 'exp://' and the port) everytime you 'npx expo start' and replace the ip
+    //Also make sure the backend repo is up-to-date locally and xampp is running
+    const url = 'https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/list-item-get-handler.php';
+    try {
+      const response = await fetch(url)
+      let jsonData = await response.json();
+      for(let i = 0; i < Object.keys(jsonData).length; i++){
+        if(i !== 0 && jsonData[i].product_id == jsonData[i-1].product_id){
+          if(!jsonData[i - 1]["subItems"]){
+            jsonData[i - 1]["subItems"] = []
+            jsonData[i - 1]["amount"] = 1
+          }
+          jsonData[i - 1]["subItems"].push(jsonData[i])
+          jsonData[i - 1]["amount"] = jsonData[i - 1]["amount"] + 1
+          jsonData.splice(i, 1)
+          i--
+        }
+      }
+      setData(jsonData);
+      setIsLoaded(true)
+    } catch(error){
+      
+      console.error(error);
+    }
+  }
+
+  const editButtonHandler = async () => {
+    const url =
+      "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/product-user-update.php";
+    try {
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteButtonHandler = async () => {
+    const url =
+      "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/delete-product-user-handler.php";
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },body: JSON.stringify({
+          productUserId : selected[0],
+        }),
+      });
+      setSelected(selected.splice(1))
+      fetchData()
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
-    <React.Fragment>
+    <SelectedContext.Provider value={selectedState}>
       <DropdownFilter />
       <View style={styles.buttonContainer}>
-        <ListpageButton name={"Edit"} />
-        <ListpageButton name={"Delete"} />
+        <ListpageButton name={"Edit"} buttonHandler={editButtonHandler} />
+        <ListpageButton name={"Delete"} buttonHandler={deleteButtonHandler} />
       </View>
       <SafeAreaView style={styles.container}>
-        <ListviewItem />
+        <ListviewItem data={data} isLoaded={isLoaded}/>
       </SafeAreaView>
-    </React.Fragment>
+    </SelectedContext.Provider>
   );
 }
 

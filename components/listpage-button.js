@@ -1,10 +1,10 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 import React from "react";
 
-export default function ListpageButton({ name }) {
+export default function ListpageButton({ name, buttonHandler }) {
   return (
     <React.Fragment>
-      <Pressable onPress={() => {}}>
+      <Pressable onPress={buttonHandler}>
         <Text style={styles.buttonStyle}>{name}</Text>
       </Pressable>
     </React.Fragment>
