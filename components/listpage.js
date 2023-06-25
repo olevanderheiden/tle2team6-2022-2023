@@ -18,7 +18,6 @@ export default function Listpage() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [selected, setSelected] = useState([])
   const selectedState = {selected, setSelected}
-  console.log(selectedState)
 
   useEffect(() => {
     fetchData();
