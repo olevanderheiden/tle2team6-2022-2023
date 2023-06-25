@@ -46,25 +46,39 @@ export default function Listpage() {
       console.error(error);
     }
   }
-  const jsonTestData = JSON.parse({
-    "ProductUserId": "2",
-    "expirationDate": "2065-4-5",
-  });
+
   const editButtonHandler = () => {
     const url =
       "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/product-user-update.php";
     try {
+      const requestData = {
+        ProductUserId: '3',
+        expirationDate: '4-5-2065',
+      };
+  console.log(JSON.stringify(requestData))
+   
+  
       fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          jsonTestData,
-        }),
-      });
-
-      console.log("edit");
+        body: JSON.stringify(
+            requestData.ProductUserId, requestData.expirationDate),
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log("Relation updated successfully");
+            // Handle success case here
+          } else {
+            console.log("Failed to update relation");
+            // Handle error case here
+          }
+        })
+        .catch((error) => {
+          console.log("An error occurred:", error);
+          // Handle error case here
+        });
     } catch (error) {
       console.log(error);
     }
