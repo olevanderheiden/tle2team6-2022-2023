@@ -11,10 +11,14 @@ import React, { useEffect, useState } from "react";
 import ListpageButton from "./listpage-button";
 import DropdownFilter from "./dropdown-filter";
 import ListviewItem from "./listview-item";
+import SelectedContext from "./selected-context";
 
 export default function Listpage() {
   const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [selected, setSelected] = useState([])
+  const selectedState = {selected, setSelected}
+  console.log(selectedState)
 
   useEffect(() => {
     fetchData();
@@ -79,7 +83,7 @@ export default function Listpage() {
     }
   };
   return (
-    <React.Fragment>
+    <SelectedContext.Provider value={selectedState}>
       <DropdownFilter />
       <View style={styles.buttonContainer}>
         <ListpageButton name={"Edit"} buttonHandler={editButtonHandler} />
@@ -88,7 +92,7 @@ export default function Listpage() {
       <SafeAreaView style={styles.container}>
         <ListviewItem data={data} isLoaded={isLoaded}/>
       </SafeAreaView>
-    </React.Fragment>
+    </SelectedContext.Provider>
   );
 }
 
