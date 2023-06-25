@@ -51,20 +51,16 @@ export default function Listpage() {
     const url =
       "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/product-user-update.php";
     try {
-      const requestData = {
-        ProductUserId: '3',
-        expirationDate: '4-5-2065',
-      };
-  console.log(JSON.stringify(requestData))
-   
-  
+ const productUserId = "5" 
       fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(
-            requestData.ProductUserId, requestData.expirationDate),
+        body: JSON.stringify({
+          productUserId : productUserId,
+          expirationDate : "6969-4-5"
+        }),
       })
         .then((response) => {
           if (response.ok) {
