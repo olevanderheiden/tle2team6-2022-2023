@@ -23,41 +23,48 @@ export default function Listpage() {
   async function fetchData() {
     //Check your expo ip (under the QR code. remove 'exp://' and the port) everytime you 'npx expo start' and replace the ip
     //Also make sure the backend repo is up-to-date locally and xampp is running
-    const url = 'https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/list-item-get-handler.php';
+    const url =
+      "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/list-item-get-handler.php";
     try {
-      const response = await fetch(url)
+      const response = await fetch(url);
       let jsonData = await response.json();
-      for(let i = 0; i < Object.keys(jsonData).length; i++){
-        if(i !== 0 && jsonData[i].product_id == jsonData[i-1].product_id){
-          if(!jsonData[i - 1]["subItems"]){
-            jsonData[i - 1]["subItems"] = []
-            jsonData[i - 1]["amount"] = 1
+      for (let i = 0; i < Object.keys(jsonData).length; i++) {
+        if (i !== 0 && jsonData[i].product_id == jsonData[i - 1].product_id) {
+          if (!jsonData[i - 1]["subItems"]) {
+            jsonData[i - 1]["subItems"] = [];
+            jsonData[i - 1]["amount"] = 1;
           }
-          jsonData[i - 1]["subItems"].push(jsonData[i])
-          jsonData[i - 1]["amount"] = jsonData[i - 1]["amount"] + 1
-          jsonData.splice(i, 1)
-          i--
+          jsonData[i - 1]["subItems"].push(jsonData[i]);
+          jsonData[i - 1]["amount"] = jsonData[i - 1]["amount"] + 1;
+          jsonData.splice(i, 1);
+          i--;
         }
       }
       setData(jsonData);
-      setIsLoaded(true)
-    } catch(error){
-      
+      setIsLoaded(true);
+    } catch (error) {
       console.error(error);
     }
   }
-
-  const editButtonHandler = async () => {
+  const jsonTestData = JSON.parse({
+    "ProductUserId": "2",
+    "expirationDate": "2065-4-5",
+  });
+  const editButtonHandler = () => {
     const url =
       "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/product-user-update.php";
     try {
-      const response = await fetch(url, {
-        method: "PUT",
+      fetch(url, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          jsonTestData,
+        }),
       });
-      console.log("yay");
+
+      console.log("edit");
     } catch (error) {
       console.log(error);
     }
@@ -67,17 +74,18 @@ export default function Listpage() {
     const url =
       "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/delete-product-user-handler.php";
     try {
-      const response = await fetch(url, {
+      await fetch(url, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
       });
-      console.log("yay");
+      console.log("delete");
     } catch (error) {
       console.error(error);
     }
   };
+
   return (
     <React.Fragment>
       <DropdownFilter />
@@ -86,7 +94,7 @@ export default function Listpage() {
         <ListpageButton name={"Delete"} buttonHandler={deleteButtonHandler} />
       </View>
       <SafeAreaView style={styles.container}>
-        <ListviewItem data={data} isLoaded={isLoaded}/>
+        <ListviewItem data={data} isLoaded={isLoaded} />
       </SafeAreaView>
     </React.Fragment>
   );
