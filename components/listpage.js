@@ -1,4 +1,4 @@
-import {SafeAreaView, StyleSheet, View, Button} from "react-native";
+import {SafeAreaView, StyleSheet, View} from "react-native";
 import React, {useEffect, useState} from "react";
 import ListpageButton from "./listpage-button";
 import ListviewItem from "./listview-item";
@@ -11,8 +11,13 @@ export default function Listpage() {
     const [selected, setSelected] = useState([]);
     const selectedState = {selected, setSelected};
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [showButtons, setShowButtons] = useState(false);
 
     const showDatePicker = () => {
+      if (selected.length === 0) {
+        alert("Select at least one item to edit.");
+        return;
+      }
       setDatePickerVisibility(true);
     };
   
@@ -21,13 +26,22 @@ export default function Listpage() {
     };
   
     const handleConfirm = (date) => {
-      console.warn("A date has been picked: ", date);
+      console.log(date)
+      editHandler(date)
       hideDatePicker();
     };
 
     useEffect(() => {
         fetchData();
     }, []);
+
+    useEffect(() => {
+      if(selected.length >= 1) {
+        setShowButtons(true)
+      } else {
+        setShowButtons(false)
+      }
+    })
 
     async function fetchData() {
         //Check your expo ip (under the QR code. remove 'exp://' and the port) everytime you 'npx expo start' and replace the ip
@@ -56,15 +70,9 @@ export default function Listpage() {
         }
     }
 
-    const editButtonHandler = async () => {
-        if (selected.length === 0) {
-            alert("Select at least one item to edit.");
-            return;
-        }
-
+    const editHandler = async (date) => {
         const url =
             "https://stud.hosted.hr.nl/1000200/fridge_friend/includes/back-end-handlers/product-user-update.php";
-
         try {
             for (const productId of selected) {
                 await fetch(url, {
@@ -117,11 +125,12 @@ export default function Listpage() {
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
         />
+        {showButtons && (
             <View style={styles.buttonContainer}>
-                <ListpageButton name={"Edit"} buttonHandler={editButtonHandler}/>
-                <Button title="Show Date Picker" onPress={showDatePicker} />
+                <ListpageButton name={"Edit"} buttonHandler={showDatePicker}/>
                 <ListpageButton name={"Delete"} buttonHandler={deleteButtonHandler}/>
             </View>
+            )}
             <SafeAreaView style={styles.container}>
                 <ListviewItem data={data} isLoaded={isLoaded}/>
             </SafeAreaView>
