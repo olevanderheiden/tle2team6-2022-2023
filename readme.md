@@ -1,6 +1,6 @@
 # Fidge Friend App for Android
 
-**Release:** a-1.0.0
+**Release:** a-1.1.0
 **download:** https://github.com/olevanderheiden/tle2team6-2022-2023/releases
 
 ## Welcom to the GitHub page of Fridge Friend!
