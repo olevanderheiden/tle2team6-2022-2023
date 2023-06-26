@@ -1,36 +1,33 @@
-import {SafeAreaView, StyleSheet, View} from "react-native";
+import {SafeAreaView, StyleSheet, View, Button} from "react-native";
 import React, {useEffect, useState} from "react";
 import ListpageButton from "./listpage-button";
 import ListviewItem from "./listview-item";
 import SelectedContext from "./selected-context";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 export default function Listpage() {
     const [data, setData] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [selected, setSelected] = useState([]);
     const selectedState = {selected, setSelected};
-    const [date, setDate] = useState(new Date());
-    const [showDatePicker, setShowDatePicker] = useState(false)
-    const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+    const showDatePicker = () => {
+      setDatePickerVisibility(true);
+    };
+  
+    const hideDatePicker = () => {
+      setDatePickerVisibility(false);
+    };
+  
+    const handleConfirm = (date) => {
+      console.warn("A date has been picked: ", date);
+      hideDatePicker();
+    };
 
     useEffect(() => {
         fetchData();
     }, []);
-
-    useEffect(() => {
-        if (selected.length >= 1) {
-            setShowDatePicker(true)
-        } else {
-            setShowDatePicker(false)
-        }
-    })
-
-    const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate || date;
-        setIsDatePickerOpen(false);
-        setDate(currentDate);
-    };
 
     async function fetchData() {
         //Check your expo ip (under the QR code. remove 'exp://' and the port) everytime you 'npx expo start' and replace the ip
@@ -114,15 +111,15 @@ export default function Listpage() {
 
     return (
         <SelectedContext.Provider value={selectedState}>
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+        />
             <View style={styles.buttonContainer}>
                 <ListpageButton name={"Edit"} buttonHandler={editButtonHandler}/>
-                <ListpageButton
-                    name={"Open Date Picker"}
-                    buttonHandler={() => setIsDatePickerOpen(true)}
-                />
-                {showDatePicker && isDatePickerOpen && (
-                    <DateTimePicker value={date} onChange={onChange}/>
-                )}
+                <Button title="Show Date Picker" onPress={showDatePicker} />
                 <ListpageButton name={"Delete"} buttonHandler={deleteButtonHandler}/>
             </View>
             <SafeAreaView style={styles.container}>
