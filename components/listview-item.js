@@ -1,21 +1,22 @@
-import { FlatList, Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import React from "react";
 import ListviewRenderItem1 from "./listview-render-item";
 
-export default function ListviewItem({data, isLoaded}) {
-
-  if(!isLoaded){
-    return(
-        <View>
-            <Text>Loading...</Text>
-        </View>
-    )
+export default function ListviewItem({ data, isLoaded }) {
+  if (!isLoaded) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
-    return(
-        <FlatList data={data}
-            extraData={{}}
-            renderItem={({item}) => (<ListviewRenderItem1 item={item}/>)}/>
-    )
+  return (
+    <FlatList
+      data={data}
+      extraData={{}}
+      renderItem={({ item }) => <ListviewRenderItem1 item={item} />}
+    />
+  );
 }
 
 const styles = StyleSheet.create({

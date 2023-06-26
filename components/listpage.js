@@ -1,13 +1,4 @@
-import {
-  FlatList,
-  Image,
-  Pressable,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  Modal,
-} from "react-native";
+import { SafeAreaView, StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import ListpageButton from "./listpage-button";
 import ListviewItem from "./listview-item";
@@ -68,13 +59,13 @@ export default function Listpage() {
       alert("select an item first!");
       return;
     }
-      if(selected.length > 1){
-        alert("You can't edit multiple Items at once!")
-        return
-      } else if (selected.length <= 0){
-        alert("select an item first!")
-        return
-      }
+    if (selected.length > 1) {
+      alert("You can't edit multiple Items at once!");
+      return;
+    } else if (selected.length <= 0) {
+      alert("select an item first!");
+      return;
+    }
     try {
       fetch(url, {
         method: "POST",
@@ -86,19 +77,9 @@ export default function Listpage() {
           expirationDate: date,
         }),
       })
-        .then((response) => {
-          if (response.ok) {
-            console.log("Relation updated successfully");
-            // Handle success case here
-          } else {
-            console.log("Failed to update relation");
-            // Handle error case here
-          }
-          fetchData();
-        })
+        .then(fetchData())
         .catch((error) => {
-          console.log("An error occurred:", error);
-          // Handle error case here
+          console.error(error);
         });
     } catch (error) {
       console.log(error);

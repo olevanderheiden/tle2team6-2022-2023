@@ -1,5 +1,5 @@
 import { TouchableHighlight, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 
 const profileName = "testUser";
 const email = "test@email.com";
@@ -21,14 +21,14 @@ export default function Profile() {
         <TouchableHighlight
           underlayColor="#eaeaea"
           style={[styles.button, styles.editButton]}
-          onPress={() => console.log("test")}
+          onPress={() => alert("This button will let you edit your profile!")}
         >
           <Text style={styles.editText}>edit</Text>
         </TouchableHighlight>
         <TouchableHighlight
           underlayColor="#eaeaea"
           style={[styles.button, styles.deleteButton]}
-          onPress={() => console.log("test")}
+          onPress={() => alert("This button wil let you delete your profile!")}
         >
           <Text style={styles.deleteText}>delete</Text>
         </TouchableHighlight>

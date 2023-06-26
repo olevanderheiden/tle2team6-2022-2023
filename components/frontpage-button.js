@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
-import React, { UseState } from "react";
+import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import FrontpageSvg from "../assets/frontpage_svg";
 export default function FrontpageButton({ destination, cleanText }) {

@@ -1,6 +1,7 @@
 import DropDownPicker from "react-native-dropdown-picker";
 import React, { useState } from "react";
 
+// not in use currently but working functionally on IOS
 export default function DropdownFilter() {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState([]);
