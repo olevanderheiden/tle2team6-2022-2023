@@ -26,9 +26,13 @@ export default function Listpage() {
   })
 
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
-    setShowDatePicker(false)
-    setDate(currentDate);
+    if(event.type === 'dismissed') {
+      setShowDatePicker(false)
+    } else if(event.type === 'set') {
+      const currentDate = selectedDate;
+      setShowDatePicker(false)
+      setDate(currentDate);
+    }
   };
 
   async function fetchData() {
