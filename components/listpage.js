@@ -27,7 +27,7 @@ export default function Listpage() {
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
-
+    setShowDatePicker(false)
     setDate(currentDate);
   };
 
