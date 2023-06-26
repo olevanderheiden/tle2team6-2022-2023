@@ -37,7 +37,7 @@ export default function Listpage() {
     //Check your expo ip (under the QR code. remove 'exp://' and the port) everytime you 'npx expo start' and replace the ip
     //Also make sure the backend repo is up-to-date locally and xampp is running
     const url =
-      "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/list-item-get-handler.php";
+      "https://stud.hosted.hr.nl/1000200/fridge_friend/includes/back-end-handlers/list-item-get-handler.php";
     try {
       const response = await fetch(url);
       let jsonData = await response.json();
@@ -62,7 +62,7 @@ export default function Listpage() {
 
   const editButtonHandler = () => {
     const url =
-      "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/product-user-update.php";
+      "https://stud.hosted.hr.nl/1000200/fridge_friend/includes/back-end-handlers/product-user-update.php";
       if(selected.length > 1){
         alert("You can't edit multiple Items at once!")
         return
@@ -102,7 +102,7 @@ export default function Listpage() {
 
   const deleteButtonHandler = async () => {
     const url =
-      "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/delete-product-user-handler.php";
+      "https://stud.hosted.hr.nl/1000200/fridge_friend/includes/back-end-handlers/delete-product-user-handler.php";
     try {
       const response = await fetch(url, {
         method: "POST",
