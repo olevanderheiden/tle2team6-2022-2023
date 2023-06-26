@@ -77,14 +77,7 @@ export default function Listpage() {
           expirationDate: date,
         }),
       })
-        .then((response) => {
-          if (response.ok) {
-            // Handle success case here
-          } else {
-            // Handle error case here
-          }
-          fetchData();
-        })
+        .then(fetchData())
         .catch((error) => {
           console.error(error);
         });
