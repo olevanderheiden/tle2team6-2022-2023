@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import ListpageButton from "./listpage-button";
-import DropdownFilter from "./dropdown-filter";
 import ListviewItem from "./listview-item";
 import SelectedContext from "./selected-context";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -132,7 +131,6 @@ export default function Listpage() {
 
   return (
     <SelectedContext.Provider value={selectedState}>
-      <DropdownFilter />
       <View style={styles.buttonContainer}>
         <ListpageButton name={"Edit"} buttonHandler={editButtonHandler} />
         <DateTimePicker value={date} onChange={onChange} />
