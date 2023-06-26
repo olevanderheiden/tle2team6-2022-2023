@@ -1,34 +1,35 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import React, { UseState } from "react";
+import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
+import React from "react";
 import { useNavigation } from "@react-navigation/native";
-
-export default function FrontpageButton({ destination }) {
+import FrontpageSvg from "../assets/frontpage_svg";
+export default function FrontpageButton({ destination, cleanText }) {
   const navigation = useNavigation();
-
   return (
-    <View style={styles.buttonContainer}>
-      <Pressable
-        style={styles.button}
-        onPress={() => navigation.navigate(destination)}
-      >
-        <Text style={styles.buttonText}>{destination} </Text>
-      </Pressable>
-    </View>
+    <TouchableHighlight
+      underlayColor="#eaeaea"
+      style={styles.button}
+      onPressOut={() => [navigation.navigate(destination)]}
+    >
+      <View>
+        <FrontpageSvg svg={destination} />
+        <Text style={styles.text}>{cleanText}</Text>
+      </View>
+    </TouchableHighlight>
   );
 }
-
 const styles = StyleSheet.create({
-  buttonContainer: {
-    width: "50%",
-  },
-  buttonText: {
-    backgroundColor: "#ffffff",
-    width: "100%",
-    aspectRatio: "1/1",
+  text: {
+    alignSelf: "center",
     color: "#629ade",
     fontSize: 20,
   },
   button: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    aspectRatio: 1 / 1,
+    width: "50%",
+    height: 0,
     borderBottomColor: "gray",
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderRightcolor: "gray",
