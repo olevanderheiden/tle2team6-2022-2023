@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#fff",
     width: "90%",
-    borderRadius: "10",
+    borderRadius: 10,
     padding: 20,
   },
   infoCard: {
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#fff",
-    borderRadius: "10",
+    borderRadius: 10,
     width: 100,
     height: 40,
     alignItems: "center",

@@ -11,10 +11,19 @@ export default function Listpage() {
   const [selected, setSelected] = useState([]);
   const selectedState = { selected, setSelected };
   const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false)
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if(selected.length == 1){
+      setShowDatePicker(true)
+    } else {
+      setShowDatePicker(false)
+    }
+  })
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -114,7 +123,7 @@ export default function Listpage() {
     <SelectedContext.Provider value={selectedState}>
       <View style={styles.buttonContainer}>
         <ListpageButton name={"Edit"} buttonHandler={editButtonHandler} />
-        <DateTimePicker value={date} onChange={onChange} />
+        {showDatePicker && (<DateTimePicker value={date} onChange={onChange} />)}
         <ListpageButton name={"Delete"} buttonHandler={deleteButtonHandler} />
       </View>
       <SafeAreaView style={styles.container}>
