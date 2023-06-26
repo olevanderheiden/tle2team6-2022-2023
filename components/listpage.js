@@ -6,32 +6,31 @@ import {
   StyleSheet,
   Text,
   View,
-  Modal
+  Modal,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import ListpageButton from "./listpage-button";
 import DropdownFilter from "./dropdown-filter";
 import ListviewItem from "./listview-item";
 import SelectedContext from "./selected-context";
-import DateTimePicker from "@react-native-community/datetimepicker"
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function Listpage() {
   const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [selected, setSelected] = useState([])
-  const selectedState = {selected, setSelected}
-  const [date, setDate] = useState(new Date())
-  
+  const [selected, setSelected] = useState([]);
+  const selectedState = { selected, setSelected };
+  const [date, setDate] = useState(new Date());
+
   useEffect(() => {
     fetchData();
   }, []);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
-    
+
     setDate(currentDate);
   };
-
 
   async function fetchData() {
     //Check your expo ip (under the QR code. remove 'exp://' and the port) everytime you 'npx expo start' and replace the ip
@@ -63,13 +62,13 @@ export default function Listpage() {
   const editButtonHandler = () => {
     const url =
       "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/product-user-update.php";
-      if(selected.length > 1){
-        alert("You can't edit multiple Items at once!")
-        return
-      } else if (selected.length <= 0){
-        alert("select an item first!")
-        return
-      }
+    if (selected.length > 1) {
+      alert("You can't edit multiple Items at once!");
+      return;
+    } else if (selected.length <= 0) {
+      alert("select an item first!");
+      return;
+    }
     try {
       fetch(url, {
         method: "POST",
@@ -77,8 +76,8 @@ export default function Listpage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          productUserId : selected[0],
-          expirationDate : date
+          productUserId: selected[0],
+          expirationDate: date,
         }),
       })
         .then((response) => {
@@ -89,7 +88,7 @@ export default function Listpage() {
             console.log("Failed to update relation");
             // Handle error case here
           }
-          fetchData()
+          fetchData();
         })
         .catch((error) => {
           console.log("An error occurred:", error);
@@ -103,35 +102,34 @@ export default function Listpage() {
   const deleteButtonHandler = async () => {
     const url =
       "https://stud.hosted.hr.nl/1000200/fridge_friend/back-end-handlers/delete-product-user-handler.php";
+    if (selected.length <= 0) {
+      alert("select an item first!");
+      return;
+    }
     try {
       const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-        },body: JSON.stringify({
-          productUserId : selected[0],
+        },
+        body: JSON.stringify({
+          productUserId: selected[0],
         }),
       });
-      setSelected(selected.splice(1))
-      fetchData()
+      setSelected(selected.splice(1));
+      fetchData();
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <SelectedContext.Provider value={selectedState}> 
-
+    <SelectedContext.Provider value={selectedState}>
       <DropdownFilter />
       <View style={styles.buttonContainer}>
-        <ListpageButton name={"Edit"} buttonHandler={editButtonHandler
-        } />
-        <DateTimePicker
-       value={date}
-       onChange={onChange}
-      />
+        <ListpageButton name={"Edit"} buttonHandler={editButtonHandler} />
+        <DateTimePicker value={date} onChange={onChange} />
         <ListpageButton name={"Delete"} buttonHandler={deleteButtonHandler} />
-       
       </View>
       <SafeAreaView style={styles.container}>
         <ListviewItem data={data} isLoaded={isLoaded} />
