@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, TouchableHighlight } from "react-native";
+import { StyleSheet, Text, TouchableHighlight } from "react-native";
 import React from "react";
 
 export default function ListpageButton({ name, buttonHandler }) {
