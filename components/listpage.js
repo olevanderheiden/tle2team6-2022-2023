@@ -107,6 +107,7 @@ export default function Listpage() {
                     }),
                 });
             }
+            setSelected([])
             fetchData();
         } catch (error) {
             console.error(error);
