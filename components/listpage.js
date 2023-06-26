@@ -92,25 +92,22 @@ export default function Listpage() {
         }
     };
 
-
     const deleteButtonHandler = async () => {
         const url =
             "https://stud.hosted.hr.nl/1000200/fridge_friend/includes/back-end-handlers/delete-product-user-handler.php";
-        if (selected.length <= 0) {
-            alert("select an item first!");
-            return;
-        }
         try {
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    productUserId: selected[0],
-                }),
-            });
-            setSelected(selected.splice(1));
+            for (const productId of selected) {
+                await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        productUserId: productId
+                    }),
+                });
+            }
+            setSelected([])
             fetchData();
         } catch (error) {
             console.error(error);
