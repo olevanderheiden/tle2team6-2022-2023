@@ -35,7 +35,6 @@ export default function Home() {
         cleanText={"Log out"}
         logout={logoutFunc}
       />
-      <FrontpageButton destination={"Login"} cleanText={"Log in"} />
     </View>
   );
 }
