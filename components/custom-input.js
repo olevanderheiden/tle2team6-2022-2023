@@ -50,6 +50,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     width: 300,
+    borderColor: "grey",
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 10
   },
   error: {
     color: "red",

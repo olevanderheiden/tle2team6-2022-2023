@@ -76,6 +76,7 @@ export default function Login() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView style={styles.container}>
+        <Text>Email of telefoonnummer</Text>
         <CustomInput
           name="login"
           placeholder="Email"
@@ -84,6 +85,7 @@ export default function Login() {
           keyboardType="email-address"
           autoComplete="email"
         />
+        <Text>Wachtwoord</Text>
         <CustomInput
           name="password"
           placeholder="Wachtwoord"
@@ -116,6 +118,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    justifyContent: "center",
+    gap: 10
   },
   input: {
     height: 40,
