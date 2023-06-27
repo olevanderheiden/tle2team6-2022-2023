@@ -4,6 +4,7 @@ import ListpageButton from "./listpage-button";
 import ListviewItem from "./listview-item";
 import SelectedContext from "./selected-context";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Listpage() {
   const [data, setData] = useState([]);
@@ -26,12 +27,12 @@ export default function Listpage() {
   };
 
   const handleConfirm = (date) => {
-    console.log(date);
     editHandler(date);
     hideDatePicker();
   };
 
   useEffect(() => {
+    getUserId();
     fetchData();
   }, []);
 
@@ -49,7 +50,15 @@ export default function Listpage() {
     const url =
       "https://stud.hosted.hr.nl/1000200/fridge_friend/includes/back-end-handlers/list-item-get-handler.php";
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: await getUserId(),
+        }),
+      });
       let jsonData = await response.json();
       for (let i = 0; i < Object.keys(jsonData).length; i++) {
         if (i !== 0 && jsonData[i].product_id == jsonData[i - 1].product_id) {
@@ -67,6 +76,16 @@ export default function Listpage() {
       setIsLoaded(true);
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  async function getUserId() {
+    try {
+      const jsonValue = await AsyncStorage.getItem("user");
+      const jsonParsed = jsonValue != null ? await JSON.parse(jsonValue) : null;
+      return jsonParsed.id;
+    } catch (e) {
+      // error reading value
     }
   }
 
