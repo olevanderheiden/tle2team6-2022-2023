@@ -6,7 +6,7 @@ export default function Settings() {
     <View style={styles.bg}>
       <View style={styles.card}>
         <Text style={styles.labelText}>App version:</Text>
-        <Text>v0.1.3-alpha</Text>
+        <Text>0.1.4-a</Text>
       </View>
       <View style={styles.card}>
         <Text style={styles.labelText}>More settings comming soon..</Text>
