@@ -2,13 +2,13 @@ import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import FrontpageSvg from "../assets/frontpage_svg";
-export default function FrontpageButton({ destination, cleanText }) {
+export default function FrontpageButton({ destination, cleanText, logout }) {
   const navigation = useNavigation();
   return (
     <TouchableHighlight
       underlayColor="#eaeaea"
       style={styles.button}
-      onPressOut={() => [navigation.navigate(destination)]}
+      onPressOut={destination != "LogOut" ? (() => [navigation.navigate(destination)]) : (logout)}
     >
       <View>
         <FrontpageSvg svg={destination} />

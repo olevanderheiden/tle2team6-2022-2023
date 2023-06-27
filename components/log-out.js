@@ -1,7 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import AuthContext from "./auth-context";
 
 export default function LogOut({ destination }) {
+  // const {setIsSignedIn} = useContext(AuthContext)
+  // useEffect(() => {
+  //   setIsSignedIn(false)
+  // })
   return (
     <View style={styles.bg}>
       <View style={styles.card}>
