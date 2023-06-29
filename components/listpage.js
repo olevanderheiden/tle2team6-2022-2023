@@ -3,24 +3,46 @@ import React, { useEffect, useState } from "react";
 import ListpageButton from "./listpage-button";
 import ListviewItem from "./listview-item";
 import SelectedContext from "./selected-context";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Listpage() {
   const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [selected, setSelected] = useState([]);
   const selectedState = { selected, setSelected };
-  const [date, setDate] = useState(new Date());
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [showButtons, setShowButtons] = useState(false);
+
+  const showDatePicker = () => {
+    if (selected.length === 0) {
+      alert("Select at least one item to edit.");
+      return;
+    }
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    editHandler(date);
+    hideDatePicker();
+  };
 
   useEffect(() => {
+    getUserId();
     fetchData();
   }, []);
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
-
-    setDate(currentDate);
-  };
+  useEffect(() => {
+    if (selected.length >= 1) {
+      setShowButtons(true);
+    } else {
+      setShowButtons(false);
+    }
+  });
 
   async function fetchData() {
     //Check your expo ip (under the QR code. remove 'exp://' and the port) everytime you 'npx expo start' and replace the ip
@@ -28,7 +50,15 @@ export default function Listpage() {
     const url =
       "https://stud.hosted.hr.nl/1000200/fridge_friend/includes/back-end-handlers/list-item-get-handler.php";
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: await getUserId(),
+        }),
+      });
       let jsonData = await response.json();
       for (let i = 0; i < Object.keys(jsonData).length; i++) {
         if (i !== 0 && jsonData[i].product_id == jsonData[i - 1].product_id) {
@@ -49,61 +79,54 @@ export default function Listpage() {
     }
   }
 
-  const editButtonHandler = () => {
+  async function getUserId() {
+    try {
+      const jsonValue = await AsyncStorage.getItem("user");
+      const jsonParsed = jsonValue != null ? await JSON.parse(jsonValue) : null;
+      return jsonParsed.id;
+    } catch (e) {
+      // error reading value
+    }
+  }
+
+  const editHandler = async (date) => {
     const url =
       "https://stud.hosted.hr.nl/1000200/fridge_friend/includes/back-end-handlers/product-user-update.php";
-    if (selected.length > 1) {
-      alert("You can't edit multiple Items at once!");
-      return;
-    } else if (selected.length <= 0) {
-      alert("select an item first!");
-      return;
-    }
-    if (selected.length > 1) {
-      alert("You can't edit multiple Items at once!");
-      return;
-    } else if (selected.length <= 0) {
-      alert("select an item first!");
-      return;
-    }
     try {
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          productUserId: selected[0],
-          expirationDate: date,
-        }),
-      })
-        .then(fetchData())
-        .catch((error) => {
-          console.error(error);
+      for (const productId of selected) {
+        await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            productUserId: productId,
+            expirationDate: date,
+          }),
         });
+      }
+      fetchData();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   const deleteButtonHandler = async () => {
     const url =
       "https://stud.hosted.hr.nl/1000200/fridge_friend/includes/back-end-handlers/delete-product-user-handler.php";
-    if (selected.length <= 0) {
-      alert("select an item first!");
-      return;
-    }
     try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          productUserId: selected[0],
-        }),
-      });
-      setSelected(selected.splice(1));
+      for (const productId of selected) {
+        await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            productUserId: productId,
+          }),
+        });
+      }
+      setSelected([]);
       fetchData();
     } catch (error) {
       console.error(error);
@@ -112,11 +135,18 @@ export default function Listpage() {
 
   return (
     <SelectedContext.Provider value={selectedState}>
-      <View style={styles.buttonContainer}>
-        <ListpageButton name={"Edit"} buttonHandler={editButtonHandler} />
-        <DateTimePicker value={date} onChange={onChange} />
-        <ListpageButton name={"Delete"} buttonHandler={deleteButtonHandler} />
-      </View>
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+      />
+      {showButtons && (
+        <View style={styles.buttonContainer}>
+          <ListpageButton name={"Edit"} buttonHandler={showDatePicker} />
+          <ListpageButton name={"Delete"} buttonHandler={deleteButtonHandler} />
+        </View>
+      )}
       <SafeAreaView style={styles.container}>
         <ListviewItem data={data} isLoaded={isLoaded} />
       </SafeAreaView>
